@@ -1,12 +1,14 @@
 import express from 'express';
 
-import main from './main';
 import authentication from './authentication';
+import license from './license';
+import scripts from './scripts';
 
 const router = express.Router();
 
 export default (): express.Router => {
-    main(router);
     authentication(router);
+    license(router);
+    scripts(router);
     return router;
 }

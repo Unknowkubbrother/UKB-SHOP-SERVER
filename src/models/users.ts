@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-export const User = mongoose.model('User', UserSchema);
+export const User = mongoose.model('accounts', UserSchema);
 
 
 export const getUsers = () => User.find();
