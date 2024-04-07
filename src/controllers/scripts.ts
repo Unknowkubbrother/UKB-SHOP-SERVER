@@ -56,25 +56,6 @@ export const getScriptByName = async (req: express.Request, res: express.Respons
     }
 }
 
-// export const buyScript = async (req: express.Request, res: express.Response) => {
-//     try {
-//         const {nameScript} = req.params;
-//         const script = await getScript(nameScript);
-//         if(!script){
-//             return res.sendStatus(404);
-//         }
-//         const {price} = script;
-//         const {balance} = req.body;
-//         if(balance < price){
-//             return res.sendStatus(400);
-//         }
-//         return res.status(200).json({balance: balance - price}).end();
-//     } catch (error) {
-//         console.log(error);
-//         return res.sendStatus(400);
-//     }
-// }
-
 export const delete_a_Script = async (req: express.Request, res: express.Response) => {
     try {
         const {nameScript} = req.params;
