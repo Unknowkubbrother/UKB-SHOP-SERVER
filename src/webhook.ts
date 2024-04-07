@@ -13,7 +13,7 @@ export const Discordwebhook = async (nameScript:string,ipaddress:string,username
         'username': "UKB-DEVELOPER",
         'attachments': [{
             'color': '#FF0000', // Replace with desired color code
-            'title': `Active License`,
+            'title': `**Active License**`,
             'text': `**ScriptName : ${nameScript}**`,
             'fields': [{
                     'title': 'IP Address',

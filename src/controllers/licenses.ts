@@ -56,7 +56,7 @@ export const delete_a_license = async (req: express.Request, res: express.Respon
         if(!License){
             return res.sendStatus(404);
         }
-        res.send("License deleted successfully!").status(200).end();
+        return res.send("License deleted successfully!").status(200).end();
     }catch (error) {
         console.log(error);
         return res.sendStatus(400);
