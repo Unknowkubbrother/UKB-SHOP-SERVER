@@ -109,11 +109,29 @@ export const ResetLicense = async (req: express.Request, res: express.Response) 
         if(!License){
             return res.sendStatus(404);
         }
+        
+        const getDate = (NextTime:number) =>{
+            let today = new Date(NextTime);
+            let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+            let time = today.getHours() + ":" + today.getMinutes();
+            return date+' '+time;
+        }
+
+        if(License.resetlicenseTime > Date.now() && License.resetlicenseTime !== 0){
+            return res.send(`You can reset your license after ${getDate(License.resetlicenseTime)}`).status(200).end();
+        }
+        const day = 1;
+        const DateNextReset = Date.now() +  day * 24 * 60 * 60 * 1000
+        License.resetlicenseTime = DateNextReset;
         const Newlicense = `license-${licenseSplit[1]}-${generateLicense(licenseSplit[1],Newipaddress)}`;
         License.license = Newlicense;
         License.ipaddress = Newipaddress;
         License.save();
-        return res.json(License).end();
+        return res.send({
+            "Newlicense": Newlicense,
+            "Newipaddress": Newipaddress,
+            "NextReset": getDate(DateNextReset)
+        }).status(200).end();
     }catch (error) {
         console.log(error);
         return res.sendStatus(400);

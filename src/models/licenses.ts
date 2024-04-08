@@ -6,6 +6,7 @@ const LicenseSchema = new mongoose.Schema({
     license: { type: String, required: true, unique: true },
     ipaddress: { type: String, required: true},
     status: { type: String, required: true, default: 'active' },
+    resetlicenseTime: { type: Number, required: true, default: 0},
     owner: { type: String, required: true}
 });
 

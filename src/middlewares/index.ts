@@ -49,7 +49,6 @@ export const isOwner = async (req: express.Request, res: express.Response, next:
 
 export const isAuthenticated = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
-        console.log('isAuthenticated middleware');
         const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
         if (!sessionToken) {
             return res.sendStatus(403);
@@ -58,7 +57,7 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
         if (!existingUser) {
             return res.sendStatus(403);
         }
-        console.log(existingUser);
+        console.log(`${existingUser.username} isAuthenticated middleware!`);
         req.body.username = existingUser.username;
         merge(req, { identity: existingUser });
         return next();
