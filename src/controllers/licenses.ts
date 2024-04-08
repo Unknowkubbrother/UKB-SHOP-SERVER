@@ -1,6 +1,6 @@
 require('dotenv').config();
 import express from 'express';
-import {getLicense,createLicense,getLicenses,checkLicense,deleteLicense,getLicenseByLicenseAndUsername,getLicenseByUsername} from '../models/licenses';
+import {getLicense,createLicense,getLicenses,checkLicense,deleteLicense,getLicenseByLicenseAndUsername,getLicenseByUsername,getLicenseByNameScriptAndUsername} from '../models/licenses';
 import {getScript} from '../models/scripts';
 import {random,generateLicense} from '../helpers';
 import { Discordwebhook } from '../webhook';
@@ -15,6 +15,11 @@ export const addLicense = async (req: express.Request, res: express.Response) =>
         }
         const License = await getLicense(license);
         if(License){
+            return res.sendStatus(409);
+        }
+
+        const CheckAlreayLicense = await getLicenseByNameScriptAndUsername(nameScript,username);
+        if(CheckAlreayLicense){
             return res.sendStatus(409);
         }
 

@@ -16,6 +16,7 @@ export const Licenses = mongoose.model('Licenses', LicenseSchema);
 export const getLicenses = () => Licenses.find();
 export const getLicense = (license: string) => Licenses.findOne({ license });
 export const getLicenseByLicenseAndUsername = (license: string,username:string) => Licenses.findOne({ license,owner:username });
+export const getLicenseByNameScriptAndUsername = (nameScript: string,username:string) => Licenses.findOne({ nameScript,owner:username });
 export const checkLicense = (license: string,ipaddress: string )=> Licenses.findOne({ 
     "license": license,
     "ipaddress": ipaddress
