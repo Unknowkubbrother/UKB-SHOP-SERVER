@@ -69,9 +69,30 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
 
 export const getIP  = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try{
-        var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
+        var ip = (function (req) {
+            var ipaddr = require('ipaddr.js');
+            var ipString = ((req.headers["X-Forwarded-For"] ||
+                req.headers["x-forwarded-for"] ||
+                '') as string).split(',')[0] ||
+                req.connection.remoteAddress;
+        
+            if (ipaddr.isValid(ipString)) {
+                try {
+                    var addr = ipaddr.parse(ipString);
+                    if (ipaddr.IPv6.isValid(ipString) && addr.isIPv4MappedAddress()) {
+                        return addr.toIPv4Address().toString();
+                    }
+                    return addr.toNormalizedString();
+                } catch (e) {
+                    return ipString;
+                }
+            }
+            return 'unknown';
+        }(req));
+        
         req.body.ipaddress = ip;
         return next();
+
     }catch (error) {
         console.log(error);
         return res.sendStatus(400);

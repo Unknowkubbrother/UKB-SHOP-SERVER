@@ -72,6 +72,7 @@ export const delete_a_license = async (req: express.Request, res: express.Respon
 export const Checklicense = async (req: express.Request, res: express.Response) => {
     try{
         const {license,ipaddress} = req.body;
+        console.log(license,ipaddress);
         if(!license || !ipaddress){
             return res.sendStatus(400);
         }
