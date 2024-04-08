@@ -126,7 +126,7 @@ export const ResetLicense = async (req: express.Request, res: express.Response) 
         if(License.resetlicenseTime > Date.now() && License.resetlicenseTime !== 0){
             return res.send(`You can reset your license after ${getDate(License.resetlicenseTime)}`).status(200).end();
         }
-        const day = 1;
+        const day = parseInt(process.env.RESET_LICENSE_TIME);
         const DateNextReset = Date.now() +  day * 24 * 60 * 60 * 1000
         License.resetlicenseTime = DateNextReset;
         const Newlicense = `license-${licenseSplit[1]}-${generateLicense(licenseSplit[1],Newipaddress)}`;
