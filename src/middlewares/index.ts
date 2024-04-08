@@ -68,27 +68,11 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
     }
 }
 
-import http from 'node:http';
-
 export const getIP  = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try{
-        const api = {
-            "host": "api.ipify.org",
-            "port": 80,
-            "path": "/?format=json",
-        }
-        http.get(api, (response) => {
-            let data = '';
-            response.on('data', (chunk) => {
-                data += chunk;
-            });
-            response.on('end', () => {
-                const ip = JSON.parse(data).ip;
-                req.body.ipaddress = ip;
-                next();
-            });
-        });
-
+        var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
+        req.body.ipaddress = ip;
+        return next();
     }catch (error) {
         console.log(error);
         return res.sendStatus(400);
