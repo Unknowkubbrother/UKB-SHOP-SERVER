@@ -74,7 +74,8 @@ export const getIP  = async (req: express.Request, res: express.Response, next: 
             var ipString = ((req.headers["X-Forwarded-For"] ||
                 req.headers["x-forwarded-for"] ||
                 '') as string).split(',')[0] ||
-                req.connection.remoteAddress;
+                req.socket.remoteAddress;
+                // req.connection.remoteAddress;
         
             if (ipaddr.isValid(ipString)) {
                 try {
