@@ -24,7 +24,6 @@
     },
     "dependencies": {
         "@types/qrcode": "^1.5.5",
-        "@types/request-ip": "^0.0.41",
         "body-parser": "^1.20.2",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.6",
