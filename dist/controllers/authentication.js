@@ -17,6 +17,10 @@ const register = async (req, res) => {
         if (existingUser) {
             return res.sendStatus(409);
         }
+        const existingEmail = await (0, users_1.getUserByEmail)(email);
+        if (existingEmail) {
+            return res.sendStatus(409);
+        }
         const salt = (0, helpers_1.random)();
         const user = await (0, users_1.createUser)({
             username,

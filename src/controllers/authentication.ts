@@ -1,6 +1,6 @@
 require('dotenv').config();
 import express from 'express';
-import {createUser,getUserByUsername,getUserBySessionToken} from '../models/users';
+import {createUser,getUserByUsername,getUserBySessionToken,getUserByEmail} from '../models/users';
 import { random, authentication, getUserResponse } from '../helpers';
 
 
@@ -19,6 +19,11 @@ export const register = async (req: express.Request, res: express.Response) => {
 
         const existingUser  = await getUserByUsername(username);
         if(existingUser){
+            return res.sendStatus(409);
+        }
+
+        const existingEmail = await getUserByEmail(email);
+        if(existingEmail){
             return res.sendStatus(409);
         }
 

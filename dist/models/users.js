@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserBySessionToken = exports.createUser = exports.getUserByUsername = exports.getUserById = exports.getUsers = exports.User = void 0;
+exports.getUserBySessionToken = exports.createUser = exports.getUserByEmail = exports.getUserByUsername = exports.getUserById = exports.getUsers = exports.User = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const roles_1 = __importDefault(require("../enum/roles"));
 const UserSchema = new mongoose_1.default.Schema({
@@ -23,6 +23,8 @@ const getUserById = (id) => exports.User.findById(id);
 exports.getUserById = getUserById;
 const getUserByUsername = (username) => exports.User.findOne({ username });
 exports.getUserByUsername = getUserByUsername;
+const getUserByEmail = (email) => exports.User.findOne({ email });
+exports.getUserByEmail = getUserByEmail;
 const createUser = (values) => new exports.User(values)
     .save().then((user) => user.toObject());
 exports.createUser = createUser;
