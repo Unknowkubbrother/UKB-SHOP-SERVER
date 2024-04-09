@@ -32,6 +32,9 @@ app.listen(process.env.SERVER_PORT || 3000, () => {
     console.log(`Sever running on port: ${process.env.SERVER_PORT || 3000}`);
 });
 
-app.use('/', router())
+// app.use('/', router())
+app.get('/', (req, res) => {
+    res.send('Hello World')
+})
 
 module.exports = app;
