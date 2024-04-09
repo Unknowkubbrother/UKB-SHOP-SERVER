@@ -5,9 +5,9 @@ import {isAuthenticated,getIP,isStaff} from '../middlewares';
 
 export default (router: express.Router) => {
     router.get('/license', isAuthenticated,isStaff,getAllLicenses)
-    router.post('/checkLicense',getIP,Checklicense)
-    router.post('/license', isAuthenticated,addLicense)
-    router.put('/license', isAuthenticated,ResetLicense)
+    router.post('/checkLicense',Checklicense)
+    router.post('/license', isAuthenticated,getIP,addLicense)
+    router.put('/license', isAuthenticated,getIP,ResetLicense)
     router.delete('/license', isAuthenticated,isStaff,delete_a_license)
     router.get('/license/user', isAuthenticated,getAllLicenseForUser)
 }   
