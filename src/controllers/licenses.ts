@@ -95,7 +95,7 @@ export const Checklicense = async (req: express.Request, res: express.Response) 
             return res.send("Script is inactive").status(200).end();
         }
         
-        Discordwebhook(License.nameScript,ipaddress,License.owner,Script.webhook);
+        await Discordwebhook(License.nameScript,ipaddress,License.owner,Script.webhook);
         return res.send(License.nameScript).status(200).end();
        
     }catch (error) {

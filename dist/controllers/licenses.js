@@ -85,7 +85,7 @@ const Checklicense = async (req, res) => {
         if (Script.status === 'inactive') {
             return res.send("Script is inactive").status(200).end();
         }
-        (0, webhook_1.Discordwebhook)(License.nameScript, ipaddress, License.owner, Script.webhook);
+        await (0, webhook_1.Discordwebhook)(License.nameScript, ipaddress, License.owner, Script.webhook);
         return res.send(License.nameScript).status(200).end();
     }
     catch (error) {
