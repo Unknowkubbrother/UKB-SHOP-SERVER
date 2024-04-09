@@ -32,4 +32,5 @@ export const Discordwebhook = async (nameScript:string,ipaddress:string,username
             'ts': Date.now() / 1_000
         }]
     }).catch(console.error);
+    console.log('Webhook sented!');
 }

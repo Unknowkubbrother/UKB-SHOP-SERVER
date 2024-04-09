@@ -32,6 +32,7 @@ const Discordwebhook = async (nameScript, ipaddress, username, webhook) => {
                 'ts': Date.now() / 1000
             }]
     }).catch(console.error);
+    console.log('Webhook sented!');
 };
 exports.Discordwebhook = Discordwebhook;
 //# sourceMappingURL=webhook.js.map
