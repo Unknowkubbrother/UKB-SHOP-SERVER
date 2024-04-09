@@ -30,7 +30,7 @@ export const addLicense = async (req: express.Request, res: express.Response) =>
             owner: username
         });
 
-        return res.status(201).json(newLicense).end();
+        return res.status(201).send(newLicense.license).end();
         
 
     }catch (error) {

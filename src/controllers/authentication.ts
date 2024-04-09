@@ -71,7 +71,7 @@ export const login = async (req: express.Request, res: express.Response) => {
         if (!user.authentication.sessionToken) {
             return res.sendStatus(401);
         }
-        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 10000000, httpOnly: true }); //900000
+        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 900000, httpOnly: true }); //900000
         console.log('setted cookie', user.authentication.sessionToken)
         const responseUser = getUserResponse(user);
 
