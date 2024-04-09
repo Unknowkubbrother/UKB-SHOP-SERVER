@@ -9,7 +9,7 @@ const Discordwebhook = async (nameScript, ipaddress, username, webhook) => {
         id: webhookSplit[5],
         token: webhookSplit[6]
     });
-    webhookClient.sendSlackMessage({
+    await webhookClient.sendSlackMessage({
         'username': "UKB-DEVELOPER",
         'attachments': [{
                 'color': '#FF0000', // Replace with desired color code
