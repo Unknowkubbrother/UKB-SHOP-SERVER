@@ -20,7 +20,10 @@ const getUserResponse = (user) => {
     let responseUser = {
         _id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        authentication: {
+            sessionToken: user.authentication.sessionToken
+        }
     };
     // I use role to check if user is staff or not
     // the way that more secure is using another frontend of dashboard

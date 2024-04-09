@@ -90,7 +90,8 @@ const loginBySessionToken = async (req, res, next) => {
 exports.loginBySessionToken = loginBySessionToken;
 const logout = async (req, res) => {
     try {
-        const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
+        // const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
+        const { sessionToken } = req.body;
         if (!sessionToken) {
             return res.sendStatus(400);
         }

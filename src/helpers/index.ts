@@ -19,10 +19,16 @@ export const getUserResponse = (user: any) => {
         username: string;
         email: string;
         role?: string; // Add the 'role' property with an optional string type
+        authentication: {
+            sessionToken: string;
+        }
     } = {
         _id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        authentication: {
+            sessionToken: user.authentication.sessionToken
+        }
     }
 
     // I use role to check if user is staff or not
