@@ -22,14 +22,16 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL)
 mongoose.connection.on('error', (error: Error) => console.log(error));
 
-server.listen(process.env.SERVER_PORT || 3000, () => {
+app.listen(process.env.SERVER_PORT || 3000, () => {
     console.log(`Sever running on port: ${process.env.SERVER_PORT || 3000}`);
 });
 
 app.use('/', router())
+
+module.exports = app;
