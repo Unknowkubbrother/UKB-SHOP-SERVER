@@ -76,9 +76,21 @@ export const login = async (req: express.Request, res: express.Response) => {
         if (!user.authentication.sessionToken) {
             return res.sendStatus(401);
         }
-        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 1800000 ,domain: 'shop.unknowkubbrother.net'}); //900000
-        res.cookie('username', user.username, { maxAge: 1800000 ,domain: 'shop.unknowkubbrother.net'});
-        res.cookie('logged_in', 'true', { maxAge: 1800000 ,domain: 'shop.unknowkubbrother.net'})
+        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { 
+            maxAge: 1800000,
+            sameSite: 'none', // Add the sameSite option
+            secure: true // Add the secure option for HTTPS
+        });
+        res.cookie('username', user.username, { 
+            maxAge: 1800000,
+            sameSite: 'none', // Add the sameSite option
+            secure: true // Add the secure option for HTTPS
+        });
+        res.cookie('logged_in', 'true', { 
+            maxAge: 1800000,
+            sameSite: 'none', // Add the sameSite option
+            secure: true // Add the secure option for HTTPS
+        });
         console.log('setted cookie', user.authentication.sessionToken)
         const responseUser = getUserResponse(user);
 
@@ -128,11 +140,11 @@ export const logout = async (req: express.Request, res: express.Response) => {
         user.authentication.sessionToken = '';
         await user.save();
         // clear cookies
-        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', {path: '/',domain: 'shop.unknowkubbrother.net'});
+        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', {path: '/'});
 
-        res.clearCookie('logged_in', {path: '/',domain: 'shop.unknowkubbrother.net'});
+        res.clearCookie('logged_in', {path: '/'});
 
-        res.clearCookie('username', {path: '/',domain: 'shop.unknowkubbrother.net'});
+        res.clearCookie('username', {path: '/'});
 
         return res.sendStatus(200);
 
