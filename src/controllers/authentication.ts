@@ -76,7 +76,9 @@ export const login = async (req: express.Request, res: express.Response) => {
         if (!user.authentication.sessionToken) {
             return res.sendStatus(401);
         }
-        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 900000, httpOnly: true }); //900000
+        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 1800000 }); //900000
+        res.cookie('username', user.username, { maxAge: 1800000 });
+        res.cookie('logged_in', 'true', { maxAge: 1800000 })
         console.log('setted cookie', user.authentication.sessionToken)
         const responseUser = getUserResponse(user);
 
@@ -111,8 +113,9 @@ export const loginBySessionToken = async (req: express.Request, res: express.Res
 
 export const logout = async (req: express.Request, res: express.Response) => {
     try {
-        // const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
-        const {sessionToken} = req.body;
+        const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
+        console.log('sessionToken: ', sessionToken);
+        // const {sessionToken} = req.body;
         if(!sessionToken) {
             return res.sendStatus(400);
         }
@@ -125,7 +128,11 @@ export const logout = async (req: express.Request, res: express.Response) => {
         user.authentication.sessionToken = '';
         await user.save();
         // clear cookies
-        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', {domain: 'localhost', path: '/'});
+        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', {path: '/'});
+
+        res.clearCookie('logged_in', {path: '/'});
+
+        res.clearCookie('username', {path: '/'});
 
         return res.sendStatus(200);
 

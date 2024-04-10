@@ -62,7 +62,9 @@ const login = async (req, res) => {
         if (!user.authentication.sessionToken) {
             return res.sendStatus(401);
         }
-        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 900000, httpOnly: true }); //900000
+        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 1800000 }); //900000
+        res.cookie('username', user.username, { maxAge: 1800000 });
+        res.cookie('logged_in', 'true', { maxAge: 1800000 });
         console.log('setted cookie', user.authentication.sessionToken);
         const responseUser = (0, helpers_1.getUserResponse)(user);
         return res.status(200).json(responseUser).end();
@@ -94,8 +96,9 @@ const loginBySessionToken = async (req, res, next) => {
 exports.loginBySessionToken = loginBySessionToken;
 const logout = async (req, res) => {
     try {
-        // const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
-        const { sessionToken } = req.body;
+        const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
+        console.log('sessionToken: ', sessionToken);
+        // const {sessionToken} = req.body;
         if (!sessionToken) {
             return res.sendStatus(400);
         }
@@ -106,7 +109,9 @@ const logout = async (req, res) => {
         user.authentication.sessionToken = '';
         await user.save();
         // clear cookies
-        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', { domain: 'localhost', path: '/' });
+        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', { path: '/' });
+        res.clearCookie('logged_in', { path: '/' });
+        res.clearCookie('username', { path: '/' });
         return res.sendStatus(200);
     }
     catch (error) {

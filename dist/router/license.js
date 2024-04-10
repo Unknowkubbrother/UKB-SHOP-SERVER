@@ -8,6 +8,6 @@ exports.default = (router) => {
     router.post('/license', middlewares_1.isAuthenticated, licenses_1.addLicense);
     router.put('/license', middlewares_1.isAuthenticated, licenses_1.ResetLicense);
     router.delete('/license', middlewares_1.isAuthenticated, middlewares_1.isStaff, licenses_1.delete_a_license);
-    router.get('/license/user', middlewares_1.isAuthenticated, licenses_1.getAllLicenseForUser);
+    router.post('/license/user', middlewares_1.isAuthenticated, licenses_1.getAllLicenseForUser);
 };
 //# sourceMappingURL=license.js.map

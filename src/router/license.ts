@@ -9,5 +9,5 @@ export default (router: express.Router) => {
     router.post('/license', isAuthenticated,addLicense)
     router.put('/license', isAuthenticated,ResetLicense)
     router.delete('/license', isAuthenticated,isStaff,delete_a_license)
-    router.get('/license/user', isAuthenticated,getAllLicenseForUser)
+    router.post('/license/user', isAuthenticated,getAllLicenseForUser)
 }

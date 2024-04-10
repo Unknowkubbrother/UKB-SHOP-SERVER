@@ -154,7 +154,16 @@ export const getAllLicenseForUser = async (req: express.Request, res: express.Re
         if(!Licenses){
             return res.sendStatus(404);
         }
-        return res.json(Licenses).end();
+        const LicensesArray = Licenses.map((license) => {
+            return {
+                "license": license.license,
+                "nameScript": license.nameScript,
+                "ipaddress": license.ipaddress,
+                "owner": license.owner,
+                "status": license.status
+            }
+        })
+        return res.json(LicensesArray).end();
     }catch (error) {
         console.log(error);
         return res.sendStatus(400);

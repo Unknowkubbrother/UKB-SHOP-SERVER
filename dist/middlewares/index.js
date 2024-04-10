@@ -50,6 +50,8 @@ exports.isOwner = isOwner;
 const isAuthenticated = async (req, res, next) => {
     try {
         const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
+        console.log('sessionToken: ', sessionToken);
+        // const {sessionToken} = req.body;
         if (!sessionToken) {
             return res.sendStatus(403);
         }
