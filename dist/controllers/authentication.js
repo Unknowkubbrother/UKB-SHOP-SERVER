@@ -62,9 +62,9 @@ const login = async (req, res) => {
         if (!user.authentication.sessionToken) {
             return res.sendStatus(401);
         }
-        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 1800000 }); //900000
-        res.cookie('username', user.username, { maxAge: 1800000 });
-        res.cookie('logged_in', 'true', { maxAge: 1800000 });
+        res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { maxAge: 1800000, domain: 'shop.unknowkubbrother.net' }); //900000
+        res.cookie('username', user.username, { maxAge: 1800000, domain: 'shop.unknowkubbrother.net' });
+        res.cookie('logged_in', 'true', { maxAge: 1800000, domain: 'shop.unknowkubbrother.net' });
         console.log('setted cookie', user.authentication.sessionToken);
         const responseUser = (0, helpers_1.getUserResponse)(user);
         return res.status(200).json(responseUser).end();
@@ -109,9 +109,9 @@ const logout = async (req, res) => {
         user.authentication.sessionToken = '';
         await user.save();
         // clear cookies
-        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', { path: '/' });
-        res.clearCookie('logged_in', { path: '/' });
-        res.clearCookie('username', { path: '/' });
+        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', { path: '/', domain: 'shop.unknowkubbrother.net' });
+        res.clearCookie('logged_in', { path: '/', domain: 'shop.unknowkubbrother.net' });
+        res.clearCookie('username', { path: '/', domain: 'shop.unknowkubbrother.net' });
         return res.sendStatus(200);
     }
     catch (error) {
