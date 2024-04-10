@@ -66,19 +66,19 @@ const login = async (req, res) => {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: 'api.unknowkubbrother.net'
+            domain: 'shop.unknowkubbrother.net'
         });
         res.cookie('username', user.username, {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: 'api.unknowkubbrother.net'
+            domain: 'shop.unknowkubbrother.net'
         });
         res.cookie('logged_in', 'true', {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: 'api.unknowkubbrother.net'
+            domain: 'shop.unknowkubbrother.net'
         });
         console.log('setted cookie', user.authentication.sessionToken);
         const responseUser = (0, helpers_1.getUserResponse)(user);
