@@ -79,17 +79,20 @@ export const login = async (req: express.Request, res: express.Response) => {
         res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, { 
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
-            secure: true // Add the secure option for HTTPS
+            secure: true, // Add the secure option for HTTPS
+            domain: 'api.unknowkubbrother.net'
         });
         res.cookie('username', user.username, { 
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
-            secure: true // Add the secure option for HTTPS
+            secure: true, // Add the secure option for HTTPS
+            domain: 'api.unknowkubbrother.net'
         });
         res.cookie('logged_in', 'true', { 
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
-            secure: true // Add the secure option for HTTPS
+            secure: true, // Add the secure option for HTTPS
+            domain: 'api.unknowkubbrother.net'
         });
         console.log('setted cookie', user.authentication.sessionToken)
         const responseUser = getUserResponse(user);
