@@ -25,7 +25,7 @@ const BuyLicense = async (req, res) => {
             const startDate = new Date(rent.startDate);
             const endDate = new Date(rent.endDate);
             startDate.setHours(0, 0, 0, 0);
-            endDate.setHours(0, 17, 0, 0);
+            endDate.setHours(0, 22, 0, 0);
             const startTime = startDate.getTime();
             const endTime = endDate.getTime();
             var newLicense = await (0, licenses_1.createLicense)({
@@ -124,7 +124,7 @@ const Checklicense = async (req, res) => {
         if (License.rent.status) {
             const startDate = License.rent.startDate;
             const endDate = License.rent.endDate;
-            const now = Date.now(); // Set timezone to Thailand (UTC+7)
+            const now = Date.now() + (7 * 60 * 60 * 1000); // Set timezone to Thailand (UTC+7)
             console.log(getDate(now), getDate(startDate), getDate(endDate));
             if (now < startDate || now > endDate) {
                 // const rentLicense = await deleteLicense(license)
