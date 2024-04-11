@@ -80,7 +80,7 @@ export const login = async (req: express.Request, res: express.Response) => {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            // domain: '.unknowkubbrother.net'
+            domain: '.unknowkubbrother.net'
         });
         res.cookie('ukb-data', JSON.stringify({
             username: user.username,
@@ -90,13 +90,13 @@ export const login = async (req: express.Request, res: express.Response) => {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            // domain: '.unknowkubbrother.net'
+            domain: '.unknowkubbrother.net'
         });
         res.cookie('logged_in', 'true', { 
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            // domain: '.unknowkubbrother.net'
+            domain: '.unknowkubbrother.net'
         });
         console.log('setted cookie', user.authentication.sessionToken)
         const responseUser = getUserResponse(user);
