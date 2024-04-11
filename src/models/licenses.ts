@@ -7,9 +7,14 @@ const LicenseSchema = new mongoose.Schema({
     ipaddress: { type: String, required: true},
     status: { type: String, required: true, default: 'active' },
     resetlicenseTime: { type: Number, required: true, default: 0},
+    rent:{
+        status:{ type: Boolean, required: true, default: false},
+        startDate:{ type: Number, required: true, default: 0},
+        endDate:{ type: Number, required: true, default: 0},
+    },
     owner: { type: String, required: true}
 });
-
+    
 export const Licenses = mongoose.model('Licenses', LicenseSchema);
 
 

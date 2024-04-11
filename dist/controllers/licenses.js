@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActiveControl = exports.getAllLicenseForUser = exports.ResetLicense = exports.Checklicense = exports.delete_a_license = exports.getAllLicenses = exports.addLicense = void 0;
-require('dotenv').config();
+exports.ActiveControl = exports.getAllLicenseForUser = exports.ResetLicense = exports.Checklicense = exports.delete_a_license = exports.getAllLicenses = exports.BuyLicense = void 0;
+require("dotenv").config();
 const licenses_1 = require("../models/licenses");
 const scripts_1 = require("../models/scripts");
 const helpers_1 = require("../helpers");
 const webhook_1 = require("../webhook");
-const addLicense = async (req, res) => {
+const BuyLicense = async (req, res) => {
     try {
-        const { nameScript, ipaddress, username } = req.body;
+        const { nameScript, ipaddress, username, rent } = req.body;
         const license = `license-${nameScript}-${(0, helpers_1.generateLicense)(nameScript, ipaddress)}`;
         if (!license || !nameScript || !ipaddress || !username) {
             return res.sendStatus(400);
@@ -21,12 +21,38 @@ const addLicense = async (req, res) => {
         if (CheckAlreayLicense) {
             return res.sendStatus(409);
         }
-        const newLicense = await (0, licenses_1.createLicense)({
-            license,
-            nameScript,
-            ipaddress,
-            owner: username
-        });
+        if (rent.status) {
+            const startDate = new Date(rent.startDate);
+            const endDate = new Date(rent.endDate);
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
+            const startTime = startDate.getTime();
+            const endTime = endDate.getTime();
+            var newLicense = await (0, licenses_1.createLicense)({
+                license,
+                nameScript,
+                ipaddress,
+                owner: username,
+                rent: {
+                    status: rent.status,
+                    startDate: startTime,
+                    endDate: endTime,
+                },
+            });
+        }
+        else {
+            var newLicense = await (0, licenses_1.createLicense)({
+                license,
+                nameScript,
+                ipaddress,
+                owner: username,
+                rent: {
+                    status: rent.status,
+                    startDate: 0,
+                    endDate: 0,
+                },
+            });
+        }
         return res.status(201).send(newLicense.license).end();
     }
     catch (error) {
@@ -34,7 +60,7 @@ const addLicense = async (req, res) => {
         return res.sendStatus(400);
     }
 };
-exports.addLicense = addLicense;
+exports.BuyLicense = BuyLicense;
 const getAllLicenses = async (req, res) => {
     try {
         const licenses = await (0, licenses_1.getLicenses)();
@@ -75,15 +101,29 @@ const Checklicense = async (req, res) => {
         if (!License) {
             return res.sendStatus(404);
         }
-        if (License.status === 'inactive') {
+        if (License.status === "inactive") {
             return res.send("License is inactive").status(200).end();
         }
         const Script = await (0, scripts_1.getScript)(License.nameScript);
         if (!Script) {
             return res.sendStatus(404);
         }
-        if (Script.status === 'inactive') {
+        if (Script.status === "inactive") {
             return res.send("Script is inactive").status(200).end();
+        }
+        if (License.rent.status) {
+            const startDate = License.rent.startDate;
+            const endDate = License.rent.endDate;
+            const now = Date.now();
+            if (now < startDate || now > endDate) {
+                const rentLicense = await (0, licenses_1.deleteLicense)(license);
+                if (!rentLicense) {
+                    return res.sendStatus(404);
+                }
+                else {
+                    return res.send("License is expired").status(200).end();
+                }
+            }
         }
         await (0, webhook_1.Discordwebhook)(License.nameScript, ipaddress, License.owner, Script.webhook);
         return res.send(License.nameScript).status(200).end();
@@ -107,12 +147,19 @@ const ResetLicense = async (req, res) => {
         }
         const getDate = (NextTime) => {
             let today = new Date(NextTime);
-            let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            let date = today.getFullYear() +
+                "-" +
+                (today.getMonth() + 1) +
+                "-" +
+                today.getDate();
             let time = today.getHours() + ":" + today.getMinutes();
-            return date + ' ' + time;
+            return date + " " + time;
         };
-        if (License.resetlicenseTime > Date.now() && License.resetlicenseTime !== 0) {
-            return res.status(400).send(`You can reset your license after ${getDate(License.resetlicenseTime)}`);
+        if (License.resetlicenseTime > Date.now() &&
+            License.resetlicenseTime !== 0) {
+            return res
+                .status(400)
+                .send(`You can reset your license after ${getDate(License.resetlicenseTime)}`);
         }
         const day = parseInt(process.env.RESET_LICENSE_TIME);
         const DateNextReset = Date.now() + day * 24 * 60 * 60 * 1000;
@@ -121,11 +168,14 @@ const ResetLicense = async (req, res) => {
         License.license = Newlicense;
         License.ipaddress = Newipaddress;
         License.save();
-        return res.send({
-            "Newlicense": Newlicense,
-            "Newipaddress": Newipaddress,
-            "NextReset": getDate(DateNextReset)
-        }).status(200).end();
+        return res
+            .send({
+            Newlicense: Newlicense,
+            Newipaddress: Newipaddress,
+            NextReset: getDate(DateNextReset),
+        })
+            .status(200)
+            .end();
     }
     catch (error) {
         console.log(error);
@@ -145,12 +195,12 @@ const getAllLicenseForUser = async (req, res) => {
         }
         const LicensesArray = Licenses.map((license) => {
             return {
-                "license": license.license,
-                "nameScript": license.nameScript,
-                "ipaddress": license.ipaddress,
-                "owner": license.owner,
-                "status": license.status,
-                "show": false
+                license: license.license,
+                nameScript: license.nameScript,
+                ipaddress: license.ipaddress,
+                owner: license.owner,
+                status: license.status,
+                show: false,
             };
         });
         return res.json(LicensesArray).status(200).end();
@@ -171,7 +221,7 @@ const ActiveControl = async (req, res) => {
         if (!Licenses) {
             return res.sendStatus(404);
         }
-        Licenses.status = Licenses.status === 'active' ? 'inactive' : 'active';
+        Licenses.status = Licenses.status === "active" ? "inactive" : "active";
         Licenses.save();
         return res.send(Licenses.status).status(200).end();
     }
