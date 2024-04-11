@@ -5,7 +5,7 @@ const middlewares_1 = require("../middlewares");
 exports.default = (router) => {
     router.get('/license', middlewares_1.isAuthenticated, middlewares_1.isStaff, licenses_1.getAllLicenses);
     router.post('/checkLicense', licenses_1.Checklicense);
-    router.post('/license', middlewares_1.isAuthenticated, licenses_1.BuyLicense);
+    router.post('/license', middlewares_1.isAuthenticated, middlewares_1.isStaff, licenses_1.BuyLicense);
     router.put('/license', middlewares_1.isAuthenticated, licenses_1.ResetLicense);
     router.delete('/license', middlewares_1.isAuthenticated, middlewares_1.isStaff, licenses_1.delete_a_license);
     router.post('/license/user', middlewares_1.isAuthenticated, licenses_1.getAllLicenseForUser);
