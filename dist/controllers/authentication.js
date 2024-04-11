@@ -66,7 +66,7 @@ const login = async (req, res) => {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: '.unknowkubbrother.net'
+            domain: process.env.domainAPI
         });
         res.cookie('ukb-data', JSON.stringify({
             username: user.username,
@@ -76,13 +76,13 @@ const login = async (req, res) => {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: '.unknowkubbrother.net'
+            domain: process.env.domainAPI
         });
         res.cookie('logged_in', 'true', {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: '.unknowkubbrother.net'
+            domain: process.env.domainAPI
         });
         console.log('setted cookie', user.authentication.sessionToken);
         const responseUser = (0, helpers_1.getUserResponse)(user);
@@ -128,9 +128,9 @@ const logout = async (req, res) => {
         user.authentication.sessionToken = '';
         await user.save();
         // clear cookies
-        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', { path: '/', domain: '.unknowkubbrother.net' });
-        res.clearCookie('logged_in', { path: '/', domain: '.unknowkubbrother.net' });
-        res.clearCookie('username', { path: '/', domain: '.unknowkubbrother.net' });
+        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', { path: '/', domain: process.env.domainAPI });
+        res.clearCookie('logged_in', { path: '/', domain: process.env.domainAPI });
+        res.clearCookie('ukb-data', { path: '/', domain: process.env.domainAPI });
         return res.sendStatus(200);
     }
     catch (error) {

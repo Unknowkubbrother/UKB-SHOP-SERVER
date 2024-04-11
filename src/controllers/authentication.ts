@@ -80,7 +80,7 @@ export const login = async (req: express.Request, res: express.Response) => {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: '.unknowkubbrother.net'
+            domain:process.env.domainAPI as string
         });
         res.cookie('ukb-data', JSON.stringify({
             username: user.username,
@@ -90,13 +90,13 @@ export const login = async (req: express.Request, res: express.Response) => {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: '.unknowkubbrother.net'
+            domain:process.env.domainAPI as string
         });
         res.cookie('logged_in', 'true', { 
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
-            domain: '.unknowkubbrother.net'
+            domain:process.env.domainAPI as string
         });
         console.log('setted cookie', user.authentication.sessionToken)
         const responseUser = getUserResponse(user);
@@ -147,11 +147,11 @@ export const logout = async (req: express.Request, res: express.Response) => {
         user.authentication.sessionToken = '';
         await user.save();
         // clear cookies
-        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', {path: '/',domain: '.unknowkubbrother.net'});
+        res.clearCookie(process.env.COOKIE_NAME || 'ukb-auth', {path: '/',domain:process.env.domainAPI as string});
 
-        res.clearCookie('logged_in', {path: '/',domain: '.unknowkubbrother.net'});
+        res.clearCookie('logged_in', {path: '/',domain:process.env.domainAPI as string});
 
-        res.clearCookie('username', {path: '/',domain: '.unknowkubbrother.net'});
+        res.clearCookie('ukb-data', {path: '/',domain: process.env.domainAPI as string});
 
         return res.sendStatus(200);
 
