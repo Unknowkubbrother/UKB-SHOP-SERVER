@@ -23,9 +23,9 @@ const BuyLicense = async (req, res) => {
         }
         if (rent.status) {
             const startDate = new Date(rent.startDate);
-            const endDate = new Date(rent.startDate);
+            const endDate = new Date(rent.endDate);
             startDate.setHours(0, 0, 0, 0);
-            endDate.setHours(23, 55, 0, 0);
+            endDate.setHours(0, 17, 0, 0);
             const startTime = startDate.getTime();
             const endTime = endDate.getTime();
             var newLicense = await (0, licenses_1.createLicense)({
@@ -111,18 +111,28 @@ const Checklicense = async (req, res) => {
         if (Script.status === "inactive") {
             return res.send("Script is inactive").status(200).end();
         }
+        const getDate = (NextTime) => {
+            let today = new Date(NextTime);
+            let date = today.getFullYear() +
+                "-" +
+                (today.getMonth() + 1) +
+                "-" +
+                today.getDate();
+            let time = today.getHours() + ":" + today.getMinutes();
+            return date + " " + time;
+        };
         if (License.rent.status) {
             const startDate = License.rent.startDate;
             const endDate = License.rent.endDate;
-            const now = Date.now();
+            const now = Date.now(); // Set timezone to Thailand (UTC+7)
+            console.log(getDate(now), getDate(startDate), getDate(endDate));
             if (now < startDate || now > endDate) {
-                const rentLicense = await (0, licenses_1.deleteLicense)(license);
-                if (!rentLicense) {
-                    return res.sendStatus(404);
-                }
-                else {
-                    return res.send("License is expired").status(200).end();
-                }
+                // const rentLicense = await deleteLicense(license)
+                // if(!rentLicense){
+                //   return res.sendStatus(404);
+                // }else{
+                //   return res.send("License is expired").status(200).end();}
+                return res.send("License is expired").status(200).end();
             }
         }
         await (0, webhook_1.Discordwebhook)(License.nameScript, ipaddress, License.owner, Script.webhook);
