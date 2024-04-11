@@ -149,10 +149,11 @@ const getAllLicenseForUser = async (req, res) => {
                 "nameScript": license.nameScript,
                 "ipaddress": license.ipaddress,
                 "owner": license.owner,
-                "status": license.status
+                "status": license.status,
+                "show": false
             };
         });
-        return res.json(LicensesArray).end();
+        return res.json(LicensesArray).status(200).end();
     }
     catch (error) {
         console.log(error);

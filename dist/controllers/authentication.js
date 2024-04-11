@@ -68,7 +68,11 @@ const login = async (req, res) => {
             secure: true, // Add the secure option for HTTPS
             domain: '.unknowkubbrother.net'
         });
-        res.cookie('username', user.username, {
+        res.cookie('ukb-data', JSON.stringify({
+            username: user.username,
+            email: user.email,
+            _id: user._id
+        }), {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
             secure: true, // Add the secure option for HTTPS
