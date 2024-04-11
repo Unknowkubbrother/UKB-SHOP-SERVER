@@ -8,16 +8,16 @@ const helpers_1 = require("../helpers");
 const webhook_1 = require("../webhook");
 const BuyLicense = async (req, res) => {
     try {
-        const { nameScript, ipaddress, username, rent } = req.body;
+        const { nameScript, ipaddress, owner, rent } = req.body;
         const license = `license-${nameScript}-${(0, helpers_1.generateLicense)(nameScript, ipaddress)}`;
-        if (!license || !nameScript || !ipaddress || !username) {
+        if (!license || !nameScript || !ipaddress || !owner) {
             return res.sendStatus(400);
         }
         const License = await (0, licenses_1.getLicense)(license);
         if (License) {
             return res.sendStatus(409);
         }
-        const CheckAlreayLicense = await (0, licenses_1.getLicenseByNameScriptAndUsername)(nameScript, username);
+        const CheckAlreayLicense = await (0, licenses_1.getLicenseByNameScriptAndUsername)(nameScript, owner);
         if (CheckAlreayLicense) {
             return res.sendStatus(409);
         }
@@ -25,14 +25,14 @@ const BuyLicense = async (req, res) => {
             const startDate = new Date(rent.startDate);
             const endDate = new Date(rent.startDate);
             startDate.setHours(0, 0, 0, 0);
-            endDate.setHours(23, 35, 0, 0);
+            endDate.setHours(23, 40, 0, 0);
             const startTime = startDate.getTime();
             const endTime = endDate.getTime();
             var newLicense = await (0, licenses_1.createLicense)({
                 license,
                 nameScript,
                 ipaddress,
-                owner: username,
+                owner: owner,
                 rent: {
                     status: rent.status,
                     startDate: startTime,
@@ -45,7 +45,7 @@ const BuyLicense = async (req, res) => {
                 license,
                 nameScript,
                 ipaddress,
-                owner: username,
+                owner: owner,
                 rent: {
                     status: rent.status,
                     startDate: 0,

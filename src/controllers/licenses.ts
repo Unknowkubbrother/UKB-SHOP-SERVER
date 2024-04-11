@@ -19,12 +19,12 @@ export const BuyLicense = async (
   res: express.Response
 ) => {
   try {
-    const { nameScript, ipaddress, username, rent } = req.body;
+    const { nameScript, ipaddress, owner, rent } = req.body;
     const license = `license-${nameScript}-${generateLicense(
       nameScript,
       ipaddress
     )}`;
-    if (!license || !nameScript || !ipaddress || !username) {
+    if (!license || !nameScript || !ipaddress || !owner) {
       return res.sendStatus(400);
     }
     const License = await getLicense(license);
@@ -32,7 +32,7 @@ export const BuyLicense = async (
       return res.sendStatus(409);
     }
 
-    const CheckAlreayLicense = await getLicenseByNameScriptAndUsername(nameScript,username);
+    const CheckAlreayLicense = await getLicenseByNameScriptAndUsername(nameScript,owner);
     if(CheckAlreayLicense){
         return res.sendStatus(409);
     }
@@ -42,7 +42,7 @@ export const BuyLicense = async (
       const startDate = new Date(rent.startDate);
       const endDate = new Date(rent.startDate);
       startDate.setHours(0, 0, 0, 0);
-      endDate.setHours(23, 35, 0, 0);
+      endDate.setHours(23, 40, 0, 0);
 
       const startTime = startDate.getTime();
       const endTime = endDate.getTime();
@@ -51,7 +51,7 @@ export const BuyLicense = async (
         license,
         nameScript,
         ipaddress,
-        owner: username,
+        owner: owner,
         rent: {
           status: rent.status,
           startDate: startTime,
@@ -63,7 +63,7 @@ export const BuyLicense = async (
         license,
         nameScript,
         ipaddress,
-        owner: username,
+        owner: owner,
         rent: {
           status: rent.status,
           startDate: 0,
