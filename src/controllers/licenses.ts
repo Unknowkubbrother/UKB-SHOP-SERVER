@@ -40,9 +40,9 @@ export const BuyLicense = async (
 
     if (rent.status) {
       const startDate = new Date(rent.startDate);
-      const endDate = new Date(rent.endDate);
+      const endDate = new Date(rent.startDate);
       startDate.setHours(0, 0, 0, 0);
-      endDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 35, 0, 0);
 
       const startTime = startDate.getTime();
       const endTime = endDate.getTime();
