@@ -112,6 +112,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 export const loginBySessionToken = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
         const sessionToken = req.cookies[process.env.COOKIE_NAME || 'ukb-auth'];
+        console.log('loginBySessionToken: ', sessionToken)
         if(!sessionToken) {
             return res.sendStatus(400);
         }

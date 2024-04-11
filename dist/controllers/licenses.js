@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllLicenseForUser = exports.ResetLicense = exports.Checklicense = exports.delete_a_license = exports.getAllLicenses = exports.addLicense = void 0;
+exports.ActiveControl = exports.getAllLicenseForUser = exports.ResetLicense = exports.Checklicense = exports.delete_a_license = exports.getAllLicenses = exports.addLicense = void 0;
 require('dotenv').config();
 const licenses_1 = require("../models/licenses");
 const scripts_1 = require("../models/scripts");
@@ -112,7 +112,7 @@ const ResetLicense = async (req, res) => {
             return date + ' ' + time;
         };
         if (License.resetlicenseTime > Date.now() && License.resetlicenseTime !== 0) {
-            return res.send(`You can reset your license after ${getDate(License.resetlicenseTime)}`).status(200).end();
+            return res.status(400).send(`You can reset your license after ${getDate(License.resetlicenseTime)}`);
         }
         const day = parseInt(process.env.RESET_LICENSE_TIME);
         const DateNextReset = Date.now() + day * 24 * 60 * 60 * 1000;
@@ -161,4 +161,24 @@ const getAllLicenseForUser = async (req, res) => {
     }
 };
 exports.getAllLicenseForUser = getAllLicenseForUser;
+const ActiveControl = async (req, res) => {
+    try {
+        const { license, username } = req.body;
+        if (!username || !license) {
+            return res.sendStatus(400);
+        }
+        const Licenses = await (0, licenses_1.getLicenseByLicenseAndUsername)(license, username);
+        if (!Licenses) {
+            return res.sendStatus(404);
+        }
+        Licenses.status = Licenses.status === 'active' ? 'inactive' : 'active';
+        Licenses.save();
+        return res.send(Licenses.status).status(200).end();
+    }
+    catch (err) {
+        console.log(err);
+        return res.sendStatus(400);
+    }
+};
+exports.ActiveControl = ActiveControl;
 //# sourceMappingURL=licenses.js.map

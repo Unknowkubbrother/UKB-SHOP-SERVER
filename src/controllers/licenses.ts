@@ -124,8 +124,9 @@ export const ResetLicense = async (req: express.Request, res: express.Response) 
         }
 
         if(License.resetlicenseTime > Date.now() && License.resetlicenseTime !== 0){
-            return res.send(`You can reset your license after ${getDate(License.resetlicenseTime)}`).status(200).end();
+            return res.status(400).send(`You can reset your license after ${getDate(License.resetlicenseTime)}`);
         }
+
         const day = parseInt(process.env.RESET_LICENSE_TIME);
         const DateNextReset = Date.now() +  day * 24 * 60 * 60 * 1000
         License.resetlicenseTime = DateNextReset;
@@ -171,3 +172,21 @@ export const getAllLicenseForUser = async (req: express.Request, res: express.Re
     }
 }
 
+export const ActiveControl = async (req: express.Request, res: express.Response) => {
+    try{
+        const {license,username} = req.body;
+        if(!username || !license){
+            return res.sendStatus(400);
+        }
+        const Licenses = await getLicenseByLicenseAndUsername(license,username);
+        if(!Licenses){
+            return res.sendStatus(404);
+        }
+        Licenses.status = Licenses.status === 'active' ? 'inactive' : 'active';
+        Licenses.save();
+        return res.send(Licenses.status).status(200).end();
+    }catch(err){
+        console.log(err)
+        return res.sendStatus(400);
+    }
+}
