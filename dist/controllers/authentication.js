@@ -65,23 +65,17 @@ const login = async (req, res) => {
         res.cookie(process.env.COOKIE_NAME || 'ukb-auth', user.authentication.sessionToken, {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
-            secure: true, // Add the secure option for HTTPS
-            domain: 'api.unknowkubbrother.net',
-            path: '/' // Add the path option to make the cookie accessible from all paths
+            secure: true // Add the secure option for HTTPS
         });
         res.cookie('username', user.username, {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
-            secure: true, // Add the secure option for HTTPS
-            domain: 'api.unknowkubbrother.net',
-            path: '/' // Add the path option to make the cookie accessible from all paths
+            secure: true // Add the secure option for HTTPS
         });
         res.cookie('logged_in', 'true', {
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option
-            secure: true, // Add the secure option for HTTPS
-            domain: 'api.unknowkubbrother.net',
-            path: '/' // Add the path option to make the cookie accessible from all paths
+            secure: true // Add the secure option for HTTPS
         });
         console.log('setted cookie', user.authentication.sessionToken);
         const responseUser = (0, helpers_1.getUserResponse)(user);
