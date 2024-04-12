@@ -85,7 +85,8 @@ export const login = async (req: express.Request, res: express.Response) => {
         res.cookie('ukb-data', JSON.stringify({
             username: user.username,
             email: user.email,
-            _id: user._id
+            _id: user._id,
+            role: user.role
         }), { 
             maxAge: 1800000,
             sameSite: 'none', // Add the sameSite option

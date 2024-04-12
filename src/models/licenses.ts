@@ -29,4 +29,4 @@ export const checkLicense = (license: string,ipaddress: string )=> Licenses.find
 export const getLicenseByUsername = (username:string) => Licenses.find({ owner:username });
 export const createLicense = (values: Record<string, any>) => new Licenses(values)
     .save().then((license) => license.toObject());
-export const deleteLicense = (license: string) => Licenses.findOneAndDelete({ license });
+export const deleteLicenseByusername = (license: string,username:string) => Licenses.findOneAndDelete({ license,owner:username });

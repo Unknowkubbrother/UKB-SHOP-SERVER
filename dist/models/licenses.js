@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteLicense = exports.createLicense = exports.getLicenseByUsername = exports.checkLicense = exports.getLicenseByNameScriptAndUsername = exports.getLicenseByLicenseAndUsername = exports.getLicense = exports.getLicenses = exports.Licenses = void 0;
+exports.deleteLicenseByusername = exports.createLicense = exports.getLicenseByUsername = exports.checkLicense = exports.getLicenseByNameScriptAndUsername = exports.getLicenseByLicenseAndUsername = exports.getLicense = exports.getLicenses = exports.Licenses = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const LicenseSchema = new mongoose_1.default.Schema({
     nameScript: { type: String, required: true },
@@ -37,6 +37,6 @@ exports.getLicenseByUsername = getLicenseByUsername;
 const createLicense = (values) => new exports.Licenses(values)
     .save().then((license) => license.toObject());
 exports.createLicense = createLicense;
-const deleteLicense = (license) => exports.Licenses.findOneAndDelete({ license });
-exports.deleteLicense = deleteLicense;
+const deleteLicenseByusername = (license, username) => exports.Licenses.findOneAndDelete({ license, owner: username });
+exports.deleteLicenseByusername = deleteLicenseByusername;
 //# sourceMappingURL=licenses.js.map
