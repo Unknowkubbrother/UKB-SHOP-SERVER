@@ -273,6 +273,16 @@ const getAllLicenseForUser = async (req, res) => {
         if (!Licenses) {
             return res.sendStatus(404);
         }
+        const getDate = (NextTime) => {
+            let today = new Date(NextTime);
+            let date = today.getFullYear() +
+                "-" +
+                (today.getMonth() + 1) +
+                "-" +
+                today.getDate();
+            let time = today.getHours() + ":" + today.getMinutes();
+            return date + " " + time;
+        };
         const LicensesArray = Licenses.map((license) => {
             return {
                 license: license.license,
@@ -280,6 +290,11 @@ const getAllLicenseForUser = async (req, res) => {
                 ipaddress: license.ipaddress,
                 owner: license.owner,
                 status: license.status,
+                rent: {
+                    status: license.rent.status,
+                    startDate: license.rent.startDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.startDate),
+                    endDate: license.rent.endDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.endDate),
+                },
                 id: license._id,
                 show: false,
             };
