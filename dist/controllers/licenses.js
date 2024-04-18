@@ -6,7 +6,7 @@ const licenses_1 = require("../models/licenses");
 const scripts_1 = require("../models/scripts");
 const helpers_1 = require("../helpers");
 const webhook_1 = require("../webhook");
-// export const BuyLicense = async (
+// export const AddLicenseByStaff = async (
 //   req: express.Request,
 //   res: express.Response
 // ) => {

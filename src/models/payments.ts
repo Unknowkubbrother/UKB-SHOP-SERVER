@@ -23,7 +23,6 @@ const PaymentsSchema = new mongoose.Schema({
   ],
   total: { type: Number, required: true },
   dateSlip: { type: String, required: true },
-  imageSlip: { type: String, required: true },
   username: { type: String, required: true }
 }, { timestamps: true});
 

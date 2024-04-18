@@ -15,7 +15,7 @@ import { getScriptByName } from "../models/scripts";
 import { random, generateLicense } from "../helpers";
 import { Discordwebhook } from "../webhook";
 
-// export const BuyLicense = async (
+// export const AddLicenseByStaff = async (
 //   req: express.Request,
 //   res: express.Response
 // ) => {

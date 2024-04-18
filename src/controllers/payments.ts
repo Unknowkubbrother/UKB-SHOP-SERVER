@@ -36,8 +36,8 @@ export const generatorQr = async (req: express.Request, res: express.Response) =
 
 export const buyScript = async (req: express.Request, res: express.Response) => {
     try{
-        const {transRefId,data,total,dateSlip,imageSlip,username} = req.body;
-        if(!transRefId || !data || !total || !dateSlip || !imageSlip || !username){
+        const {transRefId,data,total,dateSlip,username} = req.body;
+        if(!transRefId || !data || !total || !dateSlip || !username){
             return res.sendStatus(400);
         }
         const slip = await createPayment({
@@ -45,7 +45,6 @@ export const buyScript = async (req: express.Request, res: express.Response) => 
             data,
             total,
             dateSlip,
-            imageSlip,
             username
         });
         

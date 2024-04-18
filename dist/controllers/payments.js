@@ -37,8 +37,8 @@ const generatorQr = async (req, res) => {
 exports.generatorQr = generatorQr;
 const buyScript = async (req, res) => {
     try {
-        const { transRefId, data, total, dateSlip, imageSlip, username } = req.body;
-        if (!transRefId || !data || !total || !dateSlip || !imageSlip || !username) {
+        const { transRefId, data, total, dateSlip, username } = req.body;
+        if (!transRefId || !data || !total || !dateSlip || !username) {
             return res.sendStatus(400);
         }
         const slip = await (0, payments_1.createPayment)({
@@ -46,7 +46,6 @@ const buyScript = async (req, res) => {
             data,
             total,
             dateSlip,
-            imageSlip,
             username
         });
         if (!slip) {

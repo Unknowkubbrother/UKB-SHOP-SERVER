@@ -1,0 +1,48 @@
+{
+    "success": true,
+    "data": {
+        "success": true,
+        "message": "✅",
+        "language": null,
+        "transRef": "2024041802204623002666208",
+        "sendingBank": "002",
+        "receivingBank": "",
+        "transDate": "20240418",
+        "transTime": "02:20:46",
+        "transTimestamp": "2024-04-17T19:20:46.000Z",
+        "sender": {
+            "displayName": null,
+            "name": null,
+            "proxy": {
+                "type": null,
+                "value": null
+            },
+            "account": {
+                "type": "BANKAC",
+                "value": "907-7-xxx592"
+            }
+        },
+        "receiver": {
+            "displayName": "นาย ณัฐชานน ท",
+            "name": "NUTCHANON S",
+            "proxy": {
+                "type": "MSISDN",
+                "value": "090-xxx-4175"
+            },
+            "account": {
+                "type": "",
+                "value": ""
+            }
+        },
+        "amount": 3,
+        "paidLocalAmount": null,
+        "paidLocalCurrency": null,
+        "countryCode": null,
+        "transFeeAmount": null,
+        "ref1": "",
+        "ref2": "",
+        "ref3": "",
+        "toMerchantId": "",
+        "qrcodeData": "004600060000010103002022520240418022046230026662085102TH9104B6D6"
+    }
+}
