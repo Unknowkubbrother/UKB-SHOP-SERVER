@@ -1,0 +1,39 @@
+{
+    "nameScript": "AllTicket",
+    "description": "detail",
+    "price": 500,
+    "trade":{
+        "permanently": {
+            "status": true,
+            "price": 5000
+        },
+        "rent": {
+            "status": true,
+            "Unitprice": 500
+        }
+    },
+    "promote":{
+        "youTube":"https://www.youtube.com/watch?v=8nHUZl04VlM",
+        "image":[
+            {
+                "url":"https://media.discordapp.net/attachments/1133807349266653264/1176607928325787649/IMG-100000000.jpg?ex=66280e86&is=66159986&hm=a8f73a541c27a0dc791d3963cf54ea3ed0948644bd0dc8c10a38c782a04e52eb&=&format=webp&width=1118&height=671",
+                "alt":"alt1"
+            },
+            {
+                "url":"url2",
+                "alt":"alt2"
+            }
+        ]
+    },
+    "Changelogs":[
+        {
+            "version":"1.0",
+            "description":"detailV1"
+        },
+        {
+            "version":"2.0",
+            "description":"detailV2"
+        }
+    ],
+    "webhook":"https://discord.com/api/webhooks/1226202876502737029/Ltn4adQCEB4Upw8LwOlYMtoN_acoOBrkgUalqnQEBRht4UyP2PIym3eLAlnYnXTF6YTM"
+}

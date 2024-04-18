@@ -1,0 +1,14 @@
+{
+    "license": "license-AllTicket-541b468fa0b85c8e1af454c026dd9c8b69341cef0a54eba1be1d81b3d8f0c56a",
+    "nameScript": "AllTicket",
+    "scriptId": "661a8b79f8ee37d4b6503cca",
+    "ipaddress": "1.20.163.23",
+    "status": "active",
+    "resetlicenseTime": 0,
+    "rent": {
+      "status": false,
+      "startDate": 0,
+      "endDate": 0
+    },
+    "owner": "natchkung"
+}

@@ -9,75 +9,110 @@ import {
   getLicenseByLicenseAndUsername,
   getLicenseByUsername,
   getLicenseByNameScriptAndUsername,
+  getLicenseById,
 } from "../models/licenses";
-import { getScript } from "../models/scripts";
+import { getScriptByName } from "../models/scripts";
 import { random, generateLicense } from "../helpers";
 import { Discordwebhook } from "../webhook";
 
-export const BuyLicense = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    const { nameScript, ipaddress, owner, rent } = req.body;
-    const license = `license-${nameScript}-${generateLicense(
+// export const BuyLicense = async (
+//   req: express.Request,
+//   res: express.Response
+// ) => {
+//   try {
+//     const { nameScript, ipaddress, owner, rent } = req.body;
+//     const license = `license-${nameScript}-${generateLicense(
+//       nameScript,
+//       ipaddress
+//     )}`;
+//     if (!license || !nameScript || !ipaddress || !owner) {
+//       return res.sendStatus(400);
+//     }
+//     const License = await getLicense(license);
+//     if (License) {
+//       return res.sendStatus(409);
+//     }
+
+//     const CheckAlreayLicense = await getLicenseByNameScriptAndUsername(nameScript,owner);
+//     if(CheckAlreayLicense){
+//         return res.sendStatus(409);
+//     }
+
+
+//     if (rent.status) {
+//     const startDate = new Date(rent.startDate);
+//     const endDate = new Date(rent.endDate);
+//     startDate.setHours(0, 0, 0, 0);
+//     endDate.setHours(0, 0, 0, 0);
+
+//       const startTime = startDate.getTime();
+//       const endTime = endDate.getTime();
+
+//       var newLicense = await createLicense({
+//         license,
+//         nameScript,
+//         ipaddress,
+//         owner: owner,
+//         rent: {
+//           status: rent.status,
+//           startDate: startTime,
+//           endDate: endTime,
+//         },
+//       });
+//     }else{
+//       var newLicense = await createLicense({
+//         license,
+//         nameScript,
+//         ipaddress,
+//         owner: owner,
+//         rent: {
+//           status: rent.status,
+//           startDate: 0,
+//           endDate: 0,
+//         },
+//       });
+//     }
+
+//     return res.status(201).send(newLicense.license).end();
+//   } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(400);
+//   }
+// };
+
+export const Addlicense = async (req: express.Request, res: express.Response) => {
+  try{
+    const { nameScript, ipaddress,id } = req.body;
+    const license = await `license-${nameScript}-${generateLicense(
       nameScript,
       ipaddress
     )}`;
-    if (!license || !nameScript || !ipaddress || !owner) {
+    if (!license || !nameScript || !ipaddress) {
       return res.sendStatus(400);
     }
-    const License = await getLicense(license);
-    if (License) {
+    const CheckLicense = await getLicense(license);
+    if (CheckLicense) {
       return res.sendStatus(409);
     }
 
-    const CheckAlreayLicense = await getLicenseByNameScriptAndUsername(nameScript,owner);
-    if(CheckAlreayLicense){
-        return res.sendStatus(409);
+    const License = await getLicenseById(id);
+    if(!License){
+      return res.sendStatus(404);
     }
 
 
-    if (rent.status) {
-    const startDate = new Date(rent.startDate);
-    const endDate = new Date(rent.endDate);
-    startDate.setHours(0, 0, 0, 0);
-    endDate.setHours(0, 0, 0, 0);
+    License.license = license;
+    License.ipaddress = ipaddress;
+    License.status = "active";
+    License.save();
 
-      const startTime = startDate.getTime();
-      const endTime = endDate.getTime();
+    return res.status(201).send(License.license).end();
 
-      var newLicense = await createLicense({
-        license,
-        nameScript,
-        ipaddress,
-        owner: owner,
-        rent: {
-          status: rent.status,
-          startDate: startTime,
-          endDate: endTime,
-        },
-      });
-    }else{
-      var newLicense = await createLicense({
-        license,
-        nameScript,
-        ipaddress,
-        owner: owner,
-        rent: {
-          status: rent.status,
-          startDate: 0,
-          endDate: 0,
-        },
-      });
-    }
-
-    return res.status(201).send(newLicense.license).end();
-  } catch (error) {
+  }catch (error) {
     console.log(error);
     return res.sendStatus(400);
   }
-};
+}
 
 export const getAllLicenses = async (
   req: express.Request,
@@ -156,13 +191,11 @@ export const Checklicense = async (
       return res.sendStatus(404);
     }
 
-    console.log(License)
-
     if (License.status === "inactive") {
       return res.send("License is inactive").status(200).end();
     }
 
-    const Script = await getScript(License.nameScript);
+    const Script = await getScriptByName(License.nameScript);
     if (!Script) {
       return res.sendStatus(404);
     }
@@ -186,8 +219,11 @@ export const Checklicense = async (
     if(License.rent.status){
         const startDate = License.rent.startDate;
         const endDate = License.rent.endDate;
-        const now = Date.now() + (7 * 60 * 60 * 1000); // Set timezone to Thailand (UTC+7)
-        // const now = Date.now();
+        if(process.env.TimeZoneTH == "true"){
+          var now = Date.now() + (7 * 60 * 60 * 1000);
+        }else{
+          var now = Date.now();
+        }
         console.log(getDate(now),getDate(startDate),getDate(endDate));
       if (now < startDate || now > endDate) {
         const rentLicense = await deleteLicenseByusername(license,License.owner)
@@ -252,12 +288,22 @@ export const ResetLicense = async (
     }
 
     const day = parseInt(process.env.RESET_LICENSE_TIME);
-    const DateNextReset = Date.now() + day * 24 * 60 * 60 * 1000;
+    if(process.env.TimeZoneTH == "true"){
+      var DateNextReset = Date.now() + (7 * 60 * 60 * 1000) + day * 24 * 60 * 60 * 1000;
+    }else{
+      var DateNextReset = Date.now() + day * 24 * 60 * 60 * 1000;
+    }
     License.resetlicenseTime = DateNextReset;
     const Newlicense = `license-${licenseSplit[1]}-${generateLicense(
       licenseSplit[1],
       Newipaddress
     )}`;
+
+    const CheckLicense = await getLicense(Newlicense);
+    if (CheckLicense) {
+      return res.sendStatus(409);
+    }
+
     License.license = Newlicense;
     License.ipaddress = Newipaddress;
     License.save();
@@ -295,6 +341,7 @@ export const getAllLicenseForUser = async (
         ipaddress: license.ipaddress,
         owner: license.owner,
         status: license.status,
+        id: license._id,
         show: false,
       };
     });

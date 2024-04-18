@@ -1,0 +1,41 @@
+{
+    "transRefId": "2024041423501024008089308",
+    "data": [
+        {
+            "scriptId": "661a8b79f8ee37d4b6503cca",
+            "nameScript": "AllTicket",
+            "Plan": {
+                "permanently": {
+                    "status": true,
+                    "price": 5000
+                },
+                "rent": {
+                    "status": true,
+                    "Unitprice": 500,
+                    "day": 2,
+                    "price": 1000
+                }
+            }
+        },
+        {
+            "scriptId": "661a8b79f8ee37d4b6503cca",
+            "nameScript": "AllTicket2",
+            "Plan": {
+                "permanently": {
+                    "status": true,
+                    "price": 5000
+                },
+                "rent": {
+                    "status": true,
+                    "Unitprice": 500,
+                    "day": 2,
+                    "price": 1000
+                }
+            }
+        }
+    ],
+    "total": 1,
+    "dateSlip": "2024-04-14T23:50:09+07:00",
+    "imageSlip": "paymentSlip-1713268467245.jpeg",
+    "username": "natchkung"
+}

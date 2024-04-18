@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 import Roles from "../enum/roles";
 
 const LicenseSchema = new mongoose.Schema({
+    license: { type: String, required: true,default: 'ยังไม่ได้เชื่อมต่อ License'},
     nameScript: { type: String, required: true},
-    license: { type: String, required: true, unique: true },
-    ipaddress: { type: String, required: true},
-    status: { type: String, required: true, default: 'active' },
+    scriptId: { type: String, required: true},
+    ipaddress: { type: String, required: true, default: 'ยังไม่ได้เชื่อมต่อ IP'},
+    status: { type: String, required: true, default: 'inactive' },
     resetlicenseTime: { type: Number, required: true, default: 0},
     rent:{
         status:{ type: Boolean, required: true, default: false},
@@ -27,6 +28,7 @@ export const checkLicense = (license: string,ipaddress: string )=> Licenses.find
     "ipaddress": ipaddress
 });
 export const getLicenseByUsername = (username:string) => Licenses.find({ owner:username });
+export const getLicenseById = (id: string) => Licenses.findById(id);
 export const createLicense = (values: Record<string, any>) => new Licenses(values)
     .save().then((license) => license.toObject());
 export const deleteLicenseByusername = (license: string,username:string) => Licenses.findOneAndDelete({ license,owner:username });
