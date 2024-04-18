@@ -2,7 +2,7 @@ require("dotenv").config();
 import generatePayload from 'promptpay-qr';
 import qrcode from 'qrcode';
 import express from 'express';
-import { createPayment } from '../models/payments';
+import { createPayment,getPaymentsbyUser } from '../models/payments';
 import { createLicense } from '../models/licenses';
 
 export const generatorQr = async (req: express.Request, res: express.Response) => {
@@ -90,6 +90,24 @@ export const buyScript = async (req: express.Request, res: express.Response) => 
         
         return res.status(201).json(slip).end();
     
+    }catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
+
+export const getpeymentForUser = async (req: express.Request, res: express.Response) => {
+    try{
+        const {username} = req.body;
+        if(!username){
+            return res.sendStatus(400);
+        }
+        const payments = await getPaymentsbyUser(username);
+        if(!payments){
+            return res.sendStatus(404);
+        }
+        return res.status(200).json(payments).end();
+
     }catch (error) {
         console.log(error);
         return res.sendStatus(400);
