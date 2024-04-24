@@ -7,7 +7,7 @@ import {random} from '../helpers';
 export const addScript = async (req: express.Request, res: express.Response) => { 
     try{
         const {nameScript,description,trade,webhook,promote,Changelogs,recommended} = req.body;
-        if(!nameScript || !description || !trade || !webhook || !promote || !Changelogs || !recommended){
+        if(!nameScript || !description || !trade || !webhook || !promote || !Changelogs){
             return res.sendStatus(400);
         }
 
@@ -83,8 +83,8 @@ export const getScriptByid = async (req: express.Request, res: express.Response)
 
 export const delete_a_Script = async (req: express.Request, res: express.Response) => {
     try {
-        const {nameScript} = req.params;
-        const script = await deleteScript(nameScript);
+        const {id} = req.params;
+        const script = await deleteScript(id);
         if(!script){
             return res.sendStatus(404);
         }

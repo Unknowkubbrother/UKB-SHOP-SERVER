@@ -7,5 +7,5 @@ export default (router: express.Router) => {
     router.post('/script', isAuthenticated,isStaff,addScript)
     router.get('/script',getAllScripts)
     router.get('/script/:id',getScriptByid)
-    router.delete('/script/:nameScript', isAuthenticated,isStaff,delete_a_Script)
+    router.delete('/script/:id', isAuthenticated,isStaff,delete_a_Script)
 }   

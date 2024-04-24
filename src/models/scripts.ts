@@ -15,12 +15,7 @@ export const ScriptSchema = new mongoose.Schema({
   },
   promote: {
     youTube: { type: String, required: true },
-    image: [
-      {
-        url: { type: String, required: true },
-        alt: { type: String, required: true },
-      },
-    ],
+    image: [],
   },
   Changelogs: [
     {
@@ -41,5 +36,5 @@ export const getScriptById = (scriptId: string) =>
 export const getScriptByName = (nameScript: string) => Scripts.findOne({ nameScript });
 export const createScript = (values: Record<string, any>) =>
   new Scripts(values).save().then((scripts) => scripts.toObject());
-export const deleteScript = (nameScript: string) =>
-  Scripts.findOneAndDelete({ nameScript });
+export const deleteScript = (id: string) =>
+  Scripts.findByIdAndDelete(id);

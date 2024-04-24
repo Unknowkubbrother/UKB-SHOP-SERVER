@@ -14,16 +14,7 @@
     },
     "promote":{
         "youTube":"https://www.youtube.com/watch?v=8nHUZl04VlM",
-        "image":[
-            {
-                "url":"https://media.discordapp.net/attachments/1133807349266653264/1176607928325787649/IMG-100000000.jpg?ex=66280e86&is=66159986&hm=a8f73a541c27a0dc791d3963cf54ea3ed0948644bd0dc8c10a38c782a04e52eb&=&format=webp&width=1118&height=671",
-                "alt":"alt1"
-            },
-            {
-                "url":"url2",
-                "alt":"alt2"
-            }
-        ]
+        "image":["https://media.discordapp.net/attachments/1133807320573431910/1232394690997780490/image.png?ex=66294c7f&is=6627faff&hm=ae44995ac4bc695c816a94d4d0c86a72467693813f1e9a634d34f19a41c6626b&=&format=webp&quality=lossless","https://media.discordapp.net/attachments/1133807349266653264/1176607928325787649/IMG-100000000.jpg?ex=662a08c6&is=6628b746&hm=8c3416cc8d01db351e9d28909f10d7782e91b73b9e3d655ebbc67ae28a0dcf2b&=&format=webp&width=1118&height=671"]
     },
     "Changelogs":[
         {
@@ -35,5 +26,6 @@
             "description":"detailV2"
         }
     ],
-    "webhook":"https://discord.com/api/webhooks/1226202876502737029/Ltn4adQCEB4Upw8LwOlYMtoN_acoOBrkgUalqnQEBRht4UyP2PIym3eLAlnYnXTF6YTM"
+    "webhook":"https://discord.com/api/webhooks/1226202876502737029/Ltn4adQCEB4Upw8LwOlYMtoN_acoOBrkgUalqnQEBRht4UyP2PIym3eLAlnYnXTF6YTM",
+    "recommended": true
 }

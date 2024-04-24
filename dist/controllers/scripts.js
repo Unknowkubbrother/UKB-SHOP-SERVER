@@ -6,7 +6,7 @@ const scripts_1 = require("../models/scripts");
 const addScript = async (req, res) => {
     try {
         const { nameScript, description, trade, webhook, promote, Changelogs, recommended } = req.body;
-        if (!nameScript || !description || !trade || !webhook || !promote || !Changelogs || !recommended) {
+        if (!nameScript || !description || !trade || !webhook || !promote || !Changelogs) {
             return res.sendStatus(400);
         }
         const Scripts = await (0, scripts_1.getScriptByName)(nameScript);
@@ -80,8 +80,8 @@ const getScriptByid = async (req, res) => {
 exports.getScriptByid = getScriptByid;
 const delete_a_Script = async (req, res) => {
     try {
-        const { nameScript } = req.params;
-        const script = await (0, scripts_1.deleteScript)(nameScript);
+        const { id } = req.params;
+        const script = await (0, scripts_1.deleteScript)(id);
         if (!script) {
             return res.sendStatus(404);
         }
