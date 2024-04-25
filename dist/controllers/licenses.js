@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActiveControl = exports.getAllLicenseForUser = exports.ResetLicense = exports.Checklicense = exports.delete_a_license = exports.getAllLicenses = exports.Addlicense = void 0;
+exports.ActiveControl = exports.getAllLicenseForUser = exports.ResetLicense = exports.Checklicense = exports.delete_a_license = exports.getLicenseByScriptIdForstaff = exports.getAllLicenses = exports.Addlicense = void 0;
 require("dotenv").config();
 const licenses_1 = require("../models/licenses");
 const scripts_1 = require("../models/scripts");
@@ -113,8 +113,12 @@ const getAllLicenses = async (req, res) => {
                 status: license.status,
                 rent: {
                     status: license.rent.status,
-                    startDate: license.rent.startDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.startDate),
-                    endDate: license.rent.endDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.endDate),
+                    startDate: license.rent.startDate === 0
+                        ? "ไม่มีวันหมดอายุ"
+                        : getDate(license.rent.startDate),
+                    endDate: license.rent.endDate === 0
+                        ? "ไม่มีวันหมดอายุ"
+                        : getDate(license.rent.endDate),
                 },
             };
         });
@@ -126,6 +130,52 @@ const getAllLicenses = async (req, res) => {
     }
 };
 exports.getAllLicenses = getAllLicenses;
+const getLicenseByScriptIdForstaff = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.sendStatus(400);
+        }
+        const License = await (0, licenses_1.getLicenseByScriptId)(id);
+        if (!License) {
+            return res.sendStatus(404);
+        }
+        const getDate = (NextTime) => {
+            let today = new Date(NextTime);
+            let date = today.getFullYear() +
+                "-" +
+                (today.getMonth() + 1) +
+                "-" +
+                today.getDate();
+            let time = today.getHours() + ":" + today.getMinutes();
+            return date + " " + time;
+        };
+        const scriptLicenses = License.map((license) => {
+            return {
+                nameScript: license.nameScript,
+                license: license.license,
+                ipaddress: license.ipaddress,
+                owner: license.owner,
+                status: license.status,
+                rent: {
+                    status: license.rent.status,
+                    startDate: license.rent.startDate === 0
+                        ? "ไม่มีวันหมดอายุ"
+                        : getDate(license.rent.startDate),
+                    endDate: license.rent.endDate === 0
+                        ? "ไม่มีวันหมดอายุ"
+                        : getDate(license.rent.endDate),
+                },
+            };
+        });
+        return res.status(200).json(scriptLicenses).end();
+    }
+    catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+};
+exports.getLicenseByScriptIdForstaff = getLicenseByScriptIdForstaff;
 const delete_a_license = async (req, res) => {
     try {
         const { license, owner } = req.body;
@@ -180,7 +230,7 @@ const Checklicense = async (req, res) => {
             const startDate = License.rent.startDate;
             const endDate = License.rent.endDate;
             if (process.env.TimeZoneTH == "true") {
-                var now = Date.now() + (7 * 60 * 60 * 1000);
+                var now = Date.now() + 7 * 60 * 60 * 1000;
             }
             else {
                 var now = Date.now();
@@ -234,7 +284,7 @@ const ResetLicense = async (req, res) => {
         }
         const day = parseInt(process.env.RESET_LICENSE_TIME);
         if (process.env.TimeZoneTH == "true") {
-            var DateNextReset = Date.now() + (7 * 60 * 60 * 1000) + day * 24 * 60 * 60 * 1000;
+            var DateNextReset = Date.now() + 7 * 60 * 60 * 1000 + day * 24 * 60 * 60 * 1000;
         }
         else {
             var DateNextReset = Date.now() + day * 24 * 60 * 60 * 1000;
@@ -283,7 +333,8 @@ const getAllLicenseForUser = async (req, res) => {
             let time = today.getHours() + ":" + today.getMinutes();
             return date + " " + time;
         };
-        const LicensesArray = Licenses.map((license) => {
+        const LicensesArray = await Promise.all(Licenses.map(async (license) => {
+            const script = await (0, scripts_1.getScriptById)(license.scriptId);
             return {
                 license: license.license,
                 nameScript: license.nameScript,
@@ -292,13 +343,18 @@ const getAllLicenseForUser = async (req, res) => {
                 status: license.status,
                 rent: {
                     status: license.rent.status,
-                    startDate: license.rent.startDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.startDate),
-                    endDate: license.rent.endDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.endDate),
+                    startDate: license.rent.startDate === 0
+                        ? "ไม่มีวันหมดอายุ"
+                        : getDate(license.rent.startDate),
+                    endDate: license.rent.endDate === 0
+                        ? "ไม่มีวันหมดอายุ"
+                        : getDate(license.rent.endDate),
                 },
                 id: license._id,
+                download: script.download,
                 show: false,
             };
-        });
+        }));
         return res.json(LicensesArray).status(200).end();
     }
     catch (error) {

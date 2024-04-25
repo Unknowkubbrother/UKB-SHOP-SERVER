@@ -10,8 +10,9 @@ import {
   getLicenseByUsername,
   getLicenseByNameScriptAndUsername,
   getLicenseById,
+  getLicenseByScriptId,
 } from "../models/licenses";
-import { getScriptByName } from "../models/scripts";
+import { getScriptByName, getScriptById } from "../models/scripts";
 import { random, generateLicense } from "../helpers";
 import { Discordwebhook } from "../webhook";
 
@@ -37,7 +38,6 @@ import { Discordwebhook } from "../webhook";
 //     if(CheckAlreayLicense){
 //         return res.sendStatus(409);
 //     }
-
 
 //     if (rent.status) {
 //     const startDate = new Date(rent.startDate);
@@ -80,9 +80,12 @@ import { Discordwebhook } from "../webhook";
 //   }
 // };
 
-export const Addlicense = async (req: express.Request, res: express.Response) => {
-  try{
-    const { nameScript, ipaddress,id } = req.body;
+export const Addlicense = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { nameScript, ipaddress, id } = req.body;
     const license = await `license-${nameScript}-${generateLicense(
       nameScript,
       ipaddress
@@ -96,10 +99,9 @@ export const Addlicense = async (req: express.Request, res: express.Response) =>
     }
 
     const License = await getLicenseById(id);
-    if(!License){
+    if (!License) {
       return res.sendStatus(404);
     }
-
 
     License.license = license;
     License.ipaddress = ipaddress;
@@ -107,12 +109,11 @@ export const Addlicense = async (req: express.Request, res: express.Response) =>
     License.save();
 
     return res.status(201).send(License.license).end();
-
-  }catch (error) {
+  } catch (error) {
     console.log(error);
     return res.sendStatus(400);
   }
-}
+};
 
 export const getAllLicenses = async (
   req: express.Request,
@@ -120,19 +121,18 @@ export const getAllLicenses = async (
 ) => {
   try {
     const licenses = await getLicenses();
-      const getDate = (NextTime: number) => {
-        let today = new Date(NextTime);
-        let date =
-          today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes();
-        return date + " " + time;
+    const getDate = (NextTime: number) => {
+      let today = new Date(NextTime);
+      let date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      let time = today.getHours() + ":" + today.getMinutes();
+      return date + " " + time;
     };
 
-  
     const scriptLicenses = licenses.map((license) => {
       return {
         nameScript: license.nameScript,
@@ -142,12 +142,72 @@ export const getAllLicenses = async (
         status: license.status,
         rent: {
           status: license.rent.status,
-          startDate: license.rent.startDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.startDate),
-          endDate: license.rent.endDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.endDate),
+          startDate:
+            license.rent.startDate === 0
+              ? "ไม่มีวันหมดอายุ"
+              : getDate(license.rent.startDate),
+          endDate:
+            license.rent.endDate === 0
+              ? "ไม่มีวันหมดอายุ"
+              : getDate(license.rent.endDate),
         },
       };
     });
 
+    return res.status(200).json(scriptLicenses).end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+};
+
+export const getLicenseByScriptIdForstaff = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.sendStatus(400);
+    }
+    const License = await getLicenseByScriptId(id);
+    if (!License) {
+      return res.sendStatus(404);
+    }
+
+    const getDate = (NextTime: number) => {
+      let today = new Date(NextTime);
+      let date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      let time = today.getHours() + ":" + today.getMinutes();
+      return date + " " + time;
+    };
+
+    const scriptLicenses = License.map((license) => {
+      return {
+        nameScript: license.nameScript,
+        license: license.license,
+        ipaddress: license.ipaddress,
+        owner: license.owner,
+        status: license.status,
+        rent: {
+          status: license.rent.status,
+          startDate:
+            license.rent.startDate === 0
+              ? "ไม่มีวันหมดอายุ"
+              : getDate(license.rent.startDate),
+          endDate:
+            license.rent.endDate === 0
+              ? "ไม่มีวันหมดอายุ"
+              : getDate(license.rent.endDate),
+        },
+      };
+    });
+    
     return res.status(200).json(scriptLicenses).end();
   } catch (error) {
     console.log(error);
@@ -160,12 +220,12 @@ export const delete_a_license = async (
   res: express.Response
 ) => {
   try {
-    const { license,owner } = req.body;
-    console.log(license,owner);
+    const { license, owner } = req.body;
+    console.log(license, owner);
     if (!license || !owner) {
       return res.sendStatus(400);
     }
-    const License = await deleteLicenseByusername(license,owner);
+    const License = await deleteLicenseByusername(license, owner);
     if (!License) {
       return res.sendStatus(404);
     }
@@ -205,32 +265,36 @@ export const Checklicense = async (
     }
 
     const getDate = (NextTime: number) => {
-        let today = new Date(NextTime);
-        let date =
-          today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes();
-        return date + " " + time;
+      let today = new Date(NextTime);
+      let date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      let time = today.getHours() + ":" + today.getMinutes();
+      return date + " " + time;
     };
 
-    if(License.rent.status){
-        const startDate = License.rent.startDate;
-        const endDate = License.rent.endDate;
-        if(process.env.TimeZoneTH == "true"){
-          var now = Date.now() + (7 * 60 * 60 * 1000);
-        }else{
-          var now = Date.now();
-        }
-        console.log(getDate(now),getDate(startDate),getDate(endDate));
+    if (License.rent.status) {
+      const startDate = License.rent.startDate;
+      const endDate = License.rent.endDate;
+      if (process.env.TimeZoneTH == "true") {
+        var now = Date.now() + 7 * 60 * 60 * 1000;
+      } else {
+        var now = Date.now();
+      }
+      console.log(getDate(now), getDate(startDate), getDate(endDate));
       if (now < startDate || now > endDate) {
-        const rentLicense = await deleteLicenseByusername(license,License.owner)
-        if(!rentLicense){
+        const rentLicense = await deleteLicenseByusername(
+          license,
+          License.owner
+        );
+        if (!rentLicense) {
           return res.sendStatus(404);
-        }else{
-          return res.send("License is expired").status(200).end();}
+        } else {
+          return res.send("License is expired").status(200).end();
+        }
       }
     }
 
@@ -288,9 +352,10 @@ export const ResetLicense = async (
     }
 
     const day = parseInt(process.env.RESET_LICENSE_TIME);
-    if(process.env.TimeZoneTH == "true"){
-      var DateNextReset = Date.now() + (7 * 60 * 60 * 1000) + day * 24 * 60 * 60 * 1000;
-    }else{
+    if (process.env.TimeZoneTH == "true") {
+      var DateNextReset =
+        Date.now() + 7 * 60 * 60 * 1000 + day * 24 * 60 * 60 * 1000;
+    } else {
       var DateNextReset = Date.now() + day * 24 * 60 * 60 * 1000;
     }
     License.resetlicenseTime = DateNextReset;
@@ -344,24 +409,34 @@ export const getAllLicenseForUser = async (
         today.getDate();
       let time = today.getHours() + ":" + today.getMinutes();
       return date + " " + time;
-  };
+    };
 
-    const LicensesArray = Licenses.map((license) => {
-      return {
-        license: license.license,
-        nameScript: license.nameScript,
-        ipaddress: license.ipaddress,
-        owner: license.owner,
-        status: license.status,
-        rent: {
-          status: license.rent.status,
-          startDate: license.rent.startDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.startDate),
-          endDate: license.rent.endDate === 0 ? "ไม่มีวันหมดอายุ" : getDate(license.rent.endDate),
-        },
-        id: license._id,
-        show: false,
-      };
-    });
+    const LicensesArray = await Promise.all(
+      Licenses.map(async (license) => {
+        const script = await getScriptById(license.scriptId);
+        return {
+          license: license.license,
+          nameScript: license.nameScript,
+          ipaddress: license.ipaddress,
+          owner: license.owner,
+          status: license.status,
+          rent: {
+            status: license.rent.status,
+            startDate:
+              license.rent.startDate === 0
+                ? "ไม่มีวันหมดอายุ"
+                : getDate(license.rent.startDate),
+            endDate:
+              license.rent.endDate === 0
+                ? "ไม่มีวันหมดอายุ"
+                : getDate(license.rent.endDate),
+          },
+          id: license._id,
+          download: script.download,
+          show: false,
+        };
+      })
+    );
     return res.json(LicensesArray).status(200).end();
   } catch (error) {
     console.log(error);

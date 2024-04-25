@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPaymentsbyUser = exports.createPayment = exports.getpeymentBytransRefId = exports.Payments = void 0;
+exports.getPayments = exports.getPaymentsbyUser = exports.createPayment = exports.getpeymentBytransRefId = exports.Payments = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const PaymentsSchema = new mongoose_1.default.Schema({
     transRefId: { type: String, required: true, unique: true },
@@ -37,4 +37,6 @@ const createPayment = (values) => new exports.Payments(values)
 exports.createPayment = createPayment;
 const getPaymentsbyUser = (username) => exports.Payments.find({ username });
 exports.getPaymentsbyUser = getPaymentsbyUser;
+const getPayments = () => exports.Payments.find();
+exports.getPayments = getPayments;
 //# sourceMappingURL=payments.js.map

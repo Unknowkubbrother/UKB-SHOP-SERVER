@@ -32,3 +32,4 @@ export const getpeymentBytransRefId = (transRefId: string) => Payments.findOne({
 export const createPayment = (values: Record<string, any>) => new Payments(values)
     .save().then((payment) => payment.toObject());
 export const getPaymentsbyUser = (username:string) => Payments.find({username});
+export const getPayments = () => Payments.find();

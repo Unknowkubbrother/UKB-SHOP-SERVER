@@ -1,13 +1,13 @@
 require('dotenv').config();
 import express from 'express';
-import {createScript,getScriptById,getScripts,deleteScript,getScriptByName} from '../models/scripts';
+import {createScript,getScriptById,getScripts,deleteScript,getScriptByName,updateScriptById} from '../models/scripts';
 import {random} from '../helpers';
 
 
 export const addScript = async (req: express.Request, res: express.Response) => { 
     try{
-        const {nameScript,description,trade,webhook,promote,Changelogs,recommended} = req.body;
-        if(!nameScript || !description || !trade || !webhook || !promote || !Changelogs){
+        const {nameScript,description,trade,webhook,promote,Changelogs,recommended,download} = req.body;
+        if(!nameScript || !description || !trade || !webhook || !promote || !Changelogs || !download){
             return res.sendStatus(400);
         }
 
@@ -23,6 +23,7 @@ export const addScript = async (req: express.Request, res: express.Response) => 
             webhook,
             promote,
             Changelogs,
+            download,
             recommended
         });
         return res.status(201).json(newScript).end();
@@ -33,6 +34,32 @@ export const addScript = async (req: express.Request, res: express.Response) => 
         return res.sendStatus(400);
     }
 
+}
+
+export const getScriptByidForStaff = async (req: express.Request, res: express.Response) => {
+    try {
+        const {id} = req.params;
+        const scripts = await getScriptById(id);
+        if(!scripts){
+            return res.sendStatus(404);
+        }
+        const scriptsList = {
+            id: scripts._id,
+            nameScript: scripts.nameScript,
+            description: scripts.description,
+            trade: scripts.trade,
+            promote: scripts.promote,
+            Changelogs: scripts.Changelogs,
+            recommended: scripts.recommended,
+            webhook: scripts.webhook,
+            download: scripts.download,
+            status: scripts.status,
+        }
+        return res.status(200).json(scriptsList).end();
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
 }
 
 export const getAllScripts = async (req: express.Request, res: express.Response) => {
@@ -90,6 +117,67 @@ export const delete_a_Script = async (req: express.Request, res: express.Respons
         }
         return res.send("Script deleted successfully!").status(200).end();
     } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
+
+export const UpdateScript = async (req: express.Request, res: express.Response) => {
+    try{
+        const {id} = req.params;
+        const {nameScript,description,trade,webhook,promote,Changelogs,recommended,download,status} = req.body;
+        if(!nameScript || !description || !trade || !webhook || !promote || !Changelogs || !download || !status){
+            return res.sendStatus(400);
+        }
+        const script = await updateScriptById(id,{
+            nameScript,
+            description,
+            trade,
+            webhook,
+            promote,
+            Changelogs,
+            download,
+            recommended,
+            status
+        });
+
+        if(!script){
+            return res.sendStatus(404);
+        }
+
+        return res.status(200).json(script).end();
+
+    }catch(error){
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
+
+export const UpdateVersion = async (req: express.Request, res: express.Response) => {
+    try{
+        const {id} = req.params;
+        const {Changelogs,download} = req.body;
+        if(!Changelogs || !download){
+            return res.sendStatus(400);
+        }
+        const script = await getScriptById(id);
+        if(!script){
+            return res.sendStatus(404);
+        }
+        const updatedChangelogs = [...script.Changelogs, ...Changelogs];
+        const updatedScript = await updateScriptById(id, {
+            Changelogs: updatedChangelogs,
+            download
+        });
+        if(!updatedScript){
+            return res.sendStatus(404);
+        }
+        return res.status(200).send({
+            Chanelogs:script.Changelogs,
+            download:script.download
+        }).end();
+
+    }catch(error){
         console.log(error);
         return res.sendStatus(400);
     }

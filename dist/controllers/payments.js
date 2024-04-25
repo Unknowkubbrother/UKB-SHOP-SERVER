@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getpeymentForUser = exports.buyScript = exports.generatorQr = void 0;
+exports.getAllpayments = exports.getpeymentForUser = exports.buyScript = exports.generatorQr = void 0;
 require("dotenv").config();
 const promptpay_qr_1 = __importDefault(require("promptpay-qr"));
 const qrcode_1 = __importDefault(require("qrcode"));
@@ -113,4 +113,18 @@ const getpeymentForUser = async (req, res) => {
     }
 };
 exports.getpeymentForUser = getpeymentForUser;
+const getAllpayments = async (req, res) => {
+    try {
+        const payments = await (0, payments_1.getPayments)();
+        if (!payments) {
+            return res.sendStatus(404);
+        }
+        return res.status(200).json(payments).end();
+    }
+    catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+};
+exports.getAllpayments = getAllpayments;
 //# sourceMappingURL=payments.js.map

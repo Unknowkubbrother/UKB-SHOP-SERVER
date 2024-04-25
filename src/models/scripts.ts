@@ -25,6 +25,7 @@ export const ScriptSchema = new mongoose.Schema({
   ],
   webhook: { type: String, required: true },
   recommended: { type: Boolean, required: true, default: false },
+  download: { type: String, required: true },
   status: { type: String, required: true, default: "active" },
 });
 
@@ -38,3 +39,5 @@ export const createScript = (values: Record<string, any>) =>
   new Scripts(values).save().then((scripts) => scripts.toObject());
 export const deleteScript = (id: string) =>
   Scripts.findByIdAndDelete(id);
+  export const updateScriptById = (scriptId: string, updates: Record<string, any>) =>
+    Scripts.findByIdAndUpdate(scriptId, updates, { new: true }).then((script) => script?.toObject()).catch(() => null);
