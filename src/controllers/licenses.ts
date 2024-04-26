@@ -23,7 +23,7 @@ export const AddLicenseByStaff = async (
   try {
     const { nameScript, ipaddress, owner, rent, scriptId, status } = req.body;
     const license = `license-${nameScript}-${generateLicense(
-      nameScript,
+      scriptId,
       ipaddress
     )}`;
     if (!license || !nameScript || !ipaddress || !owner || !rent || !scriptId || !status) {
@@ -84,9 +84,9 @@ export const Addlicense = async (
   res: express.Response
 ) => {
   try {
-    const { nameScript, ipaddress, id } = req.body;
+    const { nameScript, ipaddress, id, scriptId } = req.body;
     const license = await `license-${nameScript}-${generateLicense(
-      nameScript,
+      scriptId,
       ipaddress.trim()
     )}`;
     if (!license || !nameScript || !ipaddress) {
@@ -220,7 +220,6 @@ export const delete_a_license = async (
 ) => {
   try {
     const { license, owner } = req.body;
-    console.log(license, owner);
     if (!license || !owner) {
       return res.sendStatus(400);
     }
@@ -315,8 +314,8 @@ export const ResetLicense = async (
   res: express.Response
 ) => {
   try {
-    const { license, username, Newipaddress } = req.body;
-    if (!license || !username || !Newipaddress) {
+    const { license, username, Newipaddress, scriptId } = req.body;
+    if (!license || !username || !Newipaddress || !scriptId) {
       return res.sendStatus(400);
     }
     const licenseSplit = license.split("-");
@@ -359,7 +358,7 @@ export const ResetLicense = async (
     }
     License.resetlicenseTime = DateNextReset;
     const Newlicense = `license-${licenseSplit[1]}-${generateLicense(
-      licenseSplit[1],
+      scriptId,
       Newipaddress.trim()
     )}`;
 
@@ -416,6 +415,7 @@ export const getAllLicenseForUser = async (
         return {
           license: license.license,
           nameScript: license.nameScript,
+          scriptId: license.scriptId,
           ipaddress: license.ipaddress,
           owner: license.owner,
           status: license.status,

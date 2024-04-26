@@ -8,8 +8,8 @@ require('dotenv').config();
 const crypto_1 = __importDefault(require("crypto"));
 const random = () => crypto_1.default.randomBytes(128).toString('base64');
 exports.random = random;
-const generateLicense = (nameScript, ipaddress) => {
-    return crypto_1.default.createHmac('sha256', [ipaddress, nameScript].join('/')).update(ipaddress).digest('hex');
+const generateLicense = (scriptId, ipaddress) => {
+    return crypto_1.default.createHmac('sha256', [ipaddress, scriptId].join('/')).update(ipaddress).digest('hex');
 };
 exports.generateLicense = generateLicense;
 const authentication = (salt, password) => {

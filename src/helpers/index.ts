@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 
 export const random = () => crypto.randomBytes(128).toString('base64');
 
-export const generateLicense = (nameScript: string, ipaddress: string) => {
-    return crypto.createHmac('sha256', [ipaddress, nameScript].join('/')).update(ipaddress).digest('hex')
+export const generateLicense = (scriptId: string, ipaddress: string) => {
+    return crypto.createHmac('sha256', [ipaddress, scriptId].join('/')).update(ipaddress).digest('hex')
 };
 
 export const authentication = (salt: string, password: string) => {

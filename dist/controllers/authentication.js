@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUser = exports.logout = exports.loginBySessionToken = exports.login = exports.register = void 0;
+exports.forgotPassword = exports.getAllUser = exports.logout = exports.loginBySessionToken = exports.login = exports.register = void 0;
 require('dotenv').config();
 const users_1 = require("../models/users");
 const helpers_1 = require("../helpers");
@@ -152,4 +152,23 @@ const getAllUser = async (req, res) => {
     }
 };
 exports.getAllUser = getAllUser;
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.sendStatus(400);
+        }
+        const user = await (0, users_1.getUserByEmail)(email);
+        if (!user) {
+            return res.sendStatus(404);
+        }
+        // send email
+        return res.sendStatus(200);
+    }
+    catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+};
+exports.forgotPassword = forgotPassword;
 //# sourceMappingURL=authentication.js.map

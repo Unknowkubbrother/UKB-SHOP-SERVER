@@ -172,3 +172,23 @@ export const getAllUser = async (req: express.Request, res: express.Response) =>
         return res.sendStatus(400);
     }
 }
+
+export const forgotPassword = async (req: express.Request, res: express.Response) => {
+    try {
+        const {email} = req.body;
+        if(!email) {
+            return res.sendStatus(400);
+        }
+
+        const user = await getUserByEmail(email);
+        if(!user) {
+            return res.sendStatus(404);
+        }
+
+        // send email
+        return res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
