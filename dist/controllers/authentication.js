@@ -183,7 +183,7 @@ const forgotPassword = async (req, res) => {
         });
         await transporter.sendMail({
             to: user.email,
-            subject: 'Password Reset For UKB-SHOP',
+            subject: 'Password Reset For CodeKub Shop',
             text: `Secretcode : ${token}`
         }).then(() => {
             return res.sendStatus(200);
