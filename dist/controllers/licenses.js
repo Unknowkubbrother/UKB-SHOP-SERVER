@@ -205,7 +205,7 @@ const Checklicense = async (req, res) => {
         if (License.status === "inactive") {
             return res.send("License is inactive").status(200).end();
         }
-        const Script = await (0, scripts_1.getScriptByName)(License.nameScript);
+        const Script = await (0, scripts_1.getScriptById)(License.scriptId);
         if (!Script) {
             return res.sendStatus(404);
         }
@@ -243,7 +243,7 @@ const Checklicense = async (req, res) => {
             }
         }
         await (0, webhook_1.Discordwebhook)(License.nameScript, ipaddress, License.owner, Script.webhook);
-        return res.send(License.nameScript).status(200).end();
+        return res.send(License.scriptId).status(200).end();
     }
     catch (error) {
         console.log(error);

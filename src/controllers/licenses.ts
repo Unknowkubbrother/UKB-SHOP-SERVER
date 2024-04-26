@@ -253,7 +253,7 @@ export const Checklicense = async (
       return res.send("License is inactive").status(200).end();
     }
 
-    const Script = await getScriptByName(License.nameScript);
+    const Script = await getScriptById(License.scriptId);
     if (!Script) {
       return res.sendStatus(404);
     }
@@ -302,7 +302,7 @@ export const Checklicense = async (
       License.owner,
       Script.webhook
     );
-    return res.send(License.nameScript).status(200).end();
+    return res.send(License.scriptId).status(200).end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
