@@ -14,7 +14,7 @@ import router from './router';
 const app : express.Express = express();
 
 app.use(cors({
-    origin: true,
+    origin: 'https://shop.unknowkubbrother.net',
     credentials: true,
 }));
 

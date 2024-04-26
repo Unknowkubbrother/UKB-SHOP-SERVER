@@ -14,7 +14,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const router_1 = __importDefault(require("./router"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: true,
+    origin: 'https://shop.unknowkubbrother.net',
     credentials: true,
 }));
 app.use((0, compression_1.default)());
