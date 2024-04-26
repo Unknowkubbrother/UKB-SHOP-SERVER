@@ -28,7 +28,9 @@
         "typescript": "^5.3.2"
     },
     "dependencies": {
+        "@types/jsonwebtoken": "^9.0.6",
         "@types/multer": "^1.4.11",
+        "@types/nodemailer": "^6.4.14",
         "@types/qrcode": "^1.5.5",
         "axios": "^1.6.8",
         "body-parser": "^1.20.2",
@@ -39,9 +41,11 @@
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "ipaddr.js": "^2.1.0",
+        "jsonwebtoken": "^9.0.2",
         "lodash": "^4.17.21",
         "mongoose": "^8.0.2",
         "multer": "^1.4.5-lts.1",
+        "nodemailer": "^6.9.13",
         "promptparse": "^1.1.0",
         "promptpay-qr": "^0.5.0",
         "qrcode": "^1.5.3"
