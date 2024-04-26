@@ -169,7 +169,7 @@ const forgotPassword = async (req, res) => {
             return res.sendStatus(404);
         }
         const Secretcode = JWT_SECRET + user.authentication.password;
-        const token = jsonwebtoken_1.default.sign({ email: user.email }, Secretcode, {
+        const token = jsonwebtoken_1.default.sign({ email: user.email, username: user.username }, Secretcode, {
             expiresIn: "5m",
         });
         const transporter = nodemailer_1.default.createTransport({
@@ -200,11 +200,11 @@ const forgotPassword = async (req, res) => {
 exports.forgotPassword = forgotPassword;
 const resetpassword = async (req, res) => {
     try {
-        const { email, token, newPassword } = req.body;
-        if (!email || !token || !newPassword) {
+        const { username, token, newPassword } = req.body;
+        if (!username || !token || !newPassword) {
             return res.sendStatus(400);
         }
-        const user = await (0, users_1.getUserByEmail)(email).select('+authentication.password');
+        const user = await (0, users_1.getUserByUsername)(username).select('+authentication.password');
         ;
         if (!user) {
             return res.sendStatus(404);
@@ -212,7 +212,7 @@ const resetpassword = async (req, res) => {
         const Secretcode = JWT_SECRET + user.authentication.password;
         jsonwebtoken_1.default.verify(token, Secretcode, async (err, decoded) => {
             if (err) {
-                return res.status(400).send('Invalid Token').end();
+                return res.status(404).send('Invalid Token').end();
             }
             const salt = (0, helpers_1.random)();
             user.authentication.password = (0, helpers_1.authentication)(salt, newPassword);

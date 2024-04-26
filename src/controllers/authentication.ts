@@ -191,7 +191,7 @@ export const forgotPassword = async (req: express.Request, res: express.Response
         }
 
         const Secretcode = JWT_SECRET + user.authentication.password;
-        const token = jwt.sign({ email: user.email }, Secretcode, {
+        const token = jwt.sign({ email: user.email, username:user.username }, Secretcode, {
             expiresIn: "5m",
           });
         
@@ -224,12 +224,12 @@ export const forgotPassword = async (req: express.Request, res: express.Response
 
 export const resetpassword = async (req: express.Request, res: express.Response) => {
     try {
-        const {email,token,newPassword} = req.body;
-        if(!email || !token || !newPassword) {
+        const {username,token,newPassword} = req.body;
+        if(!username || !token || !newPassword) {
             return res.sendStatus(400);
         }
 
-        const user = await getUserByEmail(email).select('+authentication.password');;
+        const user = await getUserByUsername(username).select('+authentication.password');;
         if(!user) {
             return res.sendStatus(404);
         }
@@ -237,7 +237,7 @@ export const resetpassword = async (req: express.Request, res: express.Response)
         const Secretcode = JWT_SECRET + user.authentication.password;
         jwt.verify(token, Secretcode, async (err: any, decoded: any) => {
             if(err) {
-                return res.status(400).send('Invalid Token').end();
+                return res.status(404).send('Invalid Token').end();
             }
 
             const salt = random();
