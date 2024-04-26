@@ -1,6 +1,6 @@
 require('dotenv').config();
 import express from 'express';
-import {createUser,getUserByUsername,getUserBySessionToken,getUserByEmail} from '../models/users';
+import {createUser,getUserByUsername,getUserBySessionToken,getUserByEmail,getUsers} from '../models/users';
 import { random, authentication, getUserResponse } from '../helpers';
 
 
@@ -158,6 +158,16 @@ export const logout = async (req: express.Request, res: express.Response) => {
         return res.sendStatus(200);
 
     }catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
+
+export const getAllUser = async (req: express.Request, res: express.Response) => {
+    try {
+        const users = await getUsers();
+        return res.status(200).json(users).end();
+    } catch (error) {
         console.log(error);
         return res.sendStatus(400);
     }

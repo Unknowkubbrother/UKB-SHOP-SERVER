@@ -11,5 +11,6 @@ exports.default = (router) => {
     router.post('/license/user', middlewares_1.isAuthenticated, licenses_1.getAllLicenseForUser);
     router.post('/license/activeControl', middlewares_1.isAuthenticated, licenses_1.ActiveControl);
     router.get('/license/:id', middlewares_1.isAuthenticated, middlewares_1.isStaff, licenses_1.getLicenseByScriptIdForstaff);
+    router.post('/license/staff', middlewares_1.isAuthenticated, middlewares_1.isStaff, licenses_1.AddLicenseByStaff);
 };
 //# sourceMappingURL=license.js.map
