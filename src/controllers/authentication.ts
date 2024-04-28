@@ -207,7 +207,7 @@ export const forgotPassword = async (req: express.Request, res: express.Response
 
         await transporter.sendMail({
             to: user.email,
-            subject: 'Password Reset For CodeKub Shop',
+            subject: 'Secretcode For CodeKub Shop',
             text: `Secretcode : ${token}`
         }).then(() => {
             return res.sendStatus(200);
