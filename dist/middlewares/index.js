@@ -94,8 +94,7 @@ const getIP = async (req, res, next) => {
             return 'unknown';
         }(req));
         req.body.ipaddress = ip;
-        res.send(ip);
-        // return next();
+        return next();
     }
     catch (error) {
         console.log(error);

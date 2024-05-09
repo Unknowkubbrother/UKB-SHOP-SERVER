@@ -200,7 +200,7 @@ const Checklicense = async (req, res) => {
         }
         const License = await (0, licenses_1.checkLicense)(license, ipaddress);
         if (!License) {
-            return res.sendStatus(404);
+            return res.status(404).send("License inactive").end();
         }
         if (License.status === "inactive") {
             return res.send("License is inactive").status(200).end();

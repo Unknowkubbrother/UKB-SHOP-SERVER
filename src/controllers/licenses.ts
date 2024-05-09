@@ -246,7 +246,7 @@ export const Checklicense = async (
     }
     const License = await checkLicense(license, ipaddress);
     if (!License) {
-      return res.sendStatus(404);
+      return res.status(404).send("License inactive").end();
     }
 
     if (License.status === "inactive") {
