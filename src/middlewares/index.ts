@@ -94,7 +94,8 @@ export const getIP  = async (req: express.Request, res: express.Response, next: 
         }(req));
         
         req.body.ipaddress = ip;
-        return next();
+        res.send(ip);
+        // return next();
 
     }catch (error) {
         console.log(error);
