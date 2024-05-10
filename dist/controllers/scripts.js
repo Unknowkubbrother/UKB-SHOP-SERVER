@@ -7,7 +7,7 @@ const licenses_1 = require("../models/licenses");
 const addScriptbyStaff = async (req, res) => {
     try {
         const { nameScript, shortDescription, description, plan, thumbnail, video, image, Changelogs, webhook, download, recommended } = req.body;
-        if (!nameScript || !shortDescription || !description || !plan || !thumbnail || !video || !image || !Changelogs || !webhook || !download) {
+        if (!nameScript || !shortDescription || !description || !plan || !thumbnail || !image || !Changelogs || !webhook || !download) {
             return res.sendStatus(400);
         }
         const Scripts = await (0, scripts_1.getScriptByName)(nameScript);
@@ -177,7 +177,7 @@ const UpdateScriptByStaff = async (req, res) => {
     try {
         const { id } = req.params;
         const { nameScript, shortDescription, description, plan, thumbnail, video, image, Changelogs, webhook, download, recommended, status } = req.body;
-        if (!nameScript || !shortDescription || !description || !plan || !thumbnail || !video || !image || !Changelogs || !webhook || !download || !status) {
+        if (!nameScript || !shortDescription || !description || !plan || !thumbnail || !image || !Changelogs || !webhook || !download || !status) {
             return res.sendStatus(400);
         }
         const script = await (0, scripts_1.updateScriptById)(id, {

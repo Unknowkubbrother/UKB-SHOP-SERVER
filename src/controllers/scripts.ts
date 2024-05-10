@@ -8,7 +8,7 @@ export const addScriptbyStaff = async (req: express.Request, res: express.Respon
     try{
         const {nameScript,shortDescription,description,plan,thumbnail,video,image,Changelogs,webhook,download,recommended} = req.body;
 
-        if(!nameScript || !shortDescription || !description || !plan || !thumbnail || !video || !image || !Changelogs || !webhook || !download){
+        if(!nameScript || !shortDescription || !description || !plan || !thumbnail || !image || !Changelogs || !webhook || !download){
             return res.sendStatus(400);
         }
 
@@ -179,7 +179,7 @@ export const UpdateScriptByStaff = async (req: express.Request, res: express.Res
     try{
         const {id} = req.params;
         const {nameScript,shortDescription,description,plan,thumbnail,video,image,Changelogs,webhook,download,recommended,status} = req.body;
-        if(!nameScript || !shortDescription || !description || !plan || !thumbnail || !video || !image || !Changelogs || !webhook || !download || !status){
+        if(!nameScript || !shortDescription || !description || !plan || !thumbnail || !image || !Changelogs || !webhook || !download || !status){
             return res.sendStatus(400);
         }
         const script = await updateScriptById(id,{
