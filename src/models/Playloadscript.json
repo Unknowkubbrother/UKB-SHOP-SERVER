@@ -1,31 +1,29 @@
 {
-    "nameScript": "AllTicket",
-    "description": "detail",
-    "price": 500,
-    "trade":{
-        "permanently": {
-            "status": true,
-            "price": 5000
-        },
-        "rent": {
-            "status": true,
-            "Unitprice": 500
-        }
-    },
-    "promote":{
-        "youTube":"https://www.youtube.com/watch?v=8nHUZl04VlM",
-        "image":["https://media.discordapp.net/attachments/1133807320573431910/1232394690997780490/image.png?ex=66294c7f&is=6627faff&hm=ae44995ac4bc695c816a94d4d0c86a72467693813f1e9a634d34f19a41c6626b&=&format=webp&quality=lossless","https://media.discordapp.net/attachments/1133807349266653264/1176607928325787649/IMG-100000000.jpg?ex=662a08c6&is=6628b746&hm=8c3416cc8d01db351e9d28909f10d7782e91b73b9e3d655ebbc67ae28a0dcf2b&=&format=webp&width=1118&height=671"]
-    },
-    "Changelogs":[
-        {
-            "version":"1.0",
-            "description":"detailV1"
-        },
-        {
-            "version":"2.0",
-            "description":"detailV2"
-        }
-    ],
-    "webhook":"https://discord.com/api/webhooks/1226202876502737029/Ltn4adQCEB4Upw8LwOlYMtoN_acoOBrkgUalqnQEBRht4UyP2PIym3eLAlnYnXTF6YTM",
-    "recommended": true
+  "nameScript": "UKB-VehicleShop",
+  "shortDescription": "ระบบร้านขายยานพาหนะ (FiveM Vehicle Shop System)",
+  "description": "ระบบร้านขายยานพาหนะ ขายได้ทั้ง รถ, เรือ, แฮลิคอปเตอร์ และยานพาหนะอื่นๆทุกชนิด แยกอาชีพได้ แยกร้านขายหลายจุดได้ สามารถปรับแต่งสีรถและเก็บภาษีการแต่งเพิ่มได้ ปรับจำนวนการขายรถได้",
+  "plan": {
+    "day": 50,
+    "monthly": 500,
+    "permanently": 5000
+  },
+  "thumbnail": "https://awayfromus.dev/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Fattachments%2F1023711125017219103%2F1091642030603636797%2Fposter.png&w=1920&q=75",
+  "video": "https://www.youtube.com/watch?v=s-pZhz3kUuw",
+  "image": [
+    "https://awayfromus.dev/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Fattachments%2F1023711125017219103%2F1091642030603636797%2Fposter.png&w=1920&q=75",
+    "https://awayfromus.dev/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Fattachments%2F932588980258607124%2F1095731655899095210%2Fimage.png&w=1920&q=75",
+    "https://awayfromus.dev/_next/image?url=https%3A%2F%2Fcdn.discordapp.com%2Fattachments%2F932588980258607124%2F1095734277536227418%2Fimage.png&w=1920&q=75"
+  ],
+  "Changelogs": [
+    {
+      "version": "1.0",
+      "logs": [
+        "Release first version (1.0)"
+      ]
+    }
+  ],
+  "webhook": "https://media.discordapp.net/attachments/1133807349266653264/1182384705572716644/image.png?ex=662de951&is=662c97d1&hm=942efdd323b16f7fa587f3daa2c6c710f284f0c3e104c2cc91a9b2de8a819aee&=&format=webp&quality=lossless&width=393&height=350",
+  "recommended": true,
+  "download": "https://awayfromus.dev/",
+  "status": "active"
 }

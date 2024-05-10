@@ -33,3 +33,4 @@ export const createLicense = (values: Record<string, any>) => new Licenses(value
     .save().then((license) => license.toObject());
 export const deleteLicenseByusername = (license: string,username:string) => Licenses.findOneAndDelete({ license,owner:username });
 export const getLicenseByScriptId = (scriptId: string) => Licenses.find({ scriptId });
+export const deleteManyLicenseByScriptId = (scriptId: string) => Licenses.deleteMany({ scriptId });

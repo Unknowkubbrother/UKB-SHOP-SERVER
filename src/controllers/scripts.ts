@@ -1,13 +1,14 @@
 require('dotenv').config();
 import express from 'express';
-import {createScript,getScriptById,getScripts,deleteScript,getScriptByName,updateScriptById} from '../models/scripts';
+import {createScript,getScriptById,getScriptsByStaff,deleteScript,getScriptByName,updateScriptById,getScriptsRecommended,getScripts} from '../models/scripts';
+import {deleteManyLicenseByScriptId} from '../models/licenses';
 import {random} from '../helpers';
 
-
-export const addScript = async (req: express.Request, res: express.Response) => { 
+export const addScriptbyStaff = async (req: express.Request, res: express.Response) => { 
     try{
-        const {nameScript,description,trade,webhook,promote,Changelogs,recommended,download} = req.body;
-        if(!nameScript || !description || !trade || !webhook || !promote || !Changelogs || !download){
+        const {nameScript,shortDescription,description,plan,thumbnail,video,image,Changelogs,webhook,download,recommended} = req.body;
+
+        if(!nameScript || !shortDescription || !description || !plan || !thumbnail || !video || !image || !Changelogs || !webhook || !download){
             return res.sendStatus(400);
         }
 
@@ -18,11 +19,14 @@ export const addScript = async (req: express.Request, res: express.Response) => 
 
         const newScript = await createScript({
             nameScript,
+            shortDescription,
             description,
-            trade,
-            webhook,
-            promote,
+            plan,
+            thumbnail,
+            video,
+            image,
             Changelogs,
+            webhook,
             download,
             recommended
         });
@@ -46,9 +50,12 @@ export const getScriptByidForStaff = async (req: express.Request, res: express.R
         const scriptsList = {
             id: scripts._id,
             nameScript: scripts.nameScript,
+            shortDescription: scripts.shortDescription,
             description: scripts.description,
-            trade: scripts.trade,
-            promote: scripts.promote,
+            plan: scripts.plan,
+            thumbnail: scripts.thumbnail,
+            video: scripts.video,
+            image: scripts.image,
             Changelogs: scripts.Changelogs,
             recommended: scripts.recommended,
             webhook: scripts.webhook,
@@ -62,18 +69,23 @@ export const getScriptByidForStaff = async (req: express.Request, res: express.R
     }
 }
 
-export const getAllScripts = async (req: express.Request, res: express.Response) => {
+export const getAllScriptsByStaff = async (req: express.Request, res: express.Response) => {
     try {
-        const scripts = await getScripts();
+        const scripts = await getScriptsByStaff();
         const scriptsList = scripts.map((script) => {
             return {
                 id: script._id,
                 nameScript: script.nameScript,
+                shortDescription: script.shortDescription,
                 description: script.description,
-                trade: script.trade,
-                promote: script.promote,
+                plan: script.plan,
+                thumbnail: script.thumbnail,
+                video: script.video,
+                image: script.image,
                 Changelogs: script.Changelogs,
                 recommended: script.recommended,
+                webhook: script.webhook,
+                download: script.download,
                 status: script.status,
             };
         });
@@ -81,6 +93,45 @@ export const getAllScripts = async (req: express.Request, res: express.Response)
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
+    }
+}
+
+export const getScriptsStore = async (req: express.Request, res: express.Response) => {
+    try{
+        const scripts = await getScripts();
+        const scriptsList = scripts.map((script) => {
+            return {
+                id: script._id,
+                nameScript: script.nameScript,
+                shortDescription: script.shortDescription,
+                plan: script.plan,
+                thumbnail: script.thumbnail,
+            };
+        });
+        return res.status(200).json(scriptsList).end();
+
+    }catch(error){
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
+
+export const getScriptsHome = async (req: express.Request, res: express.Response) => {
+    try{
+        const scripts = await getScriptsRecommended();
+        const scriptsList = scripts.map((script) => {
+            return {
+                id: script._id,
+                nameScript: script.nameScript,
+                thumbnail: script.thumbnail
+            };
+        });
+        return res.status(200).json(scriptsList).end();
+
+    }catch(error){
+        console.log(error);
+        return res.sendStatus(400);
+    
     }
 }
 
@@ -95,10 +146,11 @@ export const getScriptByid = async (req: express.Request, res: express.Response)
             id: scripts._id,
             nameScript: scripts.nameScript,
             description: scripts.description,
-            trade: scripts.trade,
-            promote: scripts.promote,
+            plan: scripts.plan,
+            thumbnail: scripts.thumbnail,
+            video: scripts.video,
+            image: scripts.image,
             Changelogs: scripts.Changelogs,
-            recommended: scripts.recommended,
             status: scripts.status,
         }
         return res.status(200).json(scriptsList).end();
@@ -108,10 +160,11 @@ export const getScriptByid = async (req: express.Request, res: express.Response)
     }
 }
 
-export const delete_a_Script = async (req: express.Request, res: express.Response) => {
+export const deleteScriptByStaff = async (req: express.Request, res: express.Response) => {
     try {
         const {id} = req.params;
         const script = await deleteScript(id);
+        await deleteManyLicenseByScriptId(id);
         if(!script){
             return res.sendStatus(404);
         }
@@ -122,20 +175,23 @@ export const delete_a_Script = async (req: express.Request, res: express.Respons
     }
 }
 
-export const UpdateScript = async (req: express.Request, res: express.Response) => {
+export const UpdateScriptByStaff = async (req: express.Request, res: express.Response) => {
     try{
         const {id} = req.params;
-        const {nameScript,description,trade,webhook,promote,Changelogs,recommended,download,status} = req.body;
-        if(!nameScript || !description || !trade || !webhook || !promote || !Changelogs || !download || !status){
+        const {nameScript,shortDescription,description,plan,thumbnail,video,image,Changelogs,webhook,download,recommended,status} = req.body;
+        if(!nameScript || !shortDescription || !description || !plan || !thumbnail || !video || !image || !Changelogs || !webhook || !download || !status){
             return res.sendStatus(400);
         }
         const script = await updateScriptById(id,{
             nameScript,
+            shortDescription,
             description,
-            trade,
-            webhook,
-            promote,
+            plan,
+            thumbnail,
+            video,
+            image,
             Changelogs,
+            webhook,
             download,
             recommended,
             status
@@ -153,7 +209,7 @@ export const UpdateScript = async (req: express.Request, res: express.Response) 
     }
 }
 
-export const UpdateVersion = async (req: express.Request, res: express.Response) => {
+export const UpdateVersionByStaff = async (req: express.Request, res: express.Response) => {
     try{
         const {id} = req.params;
         const {Changelogs,download} = req.body;

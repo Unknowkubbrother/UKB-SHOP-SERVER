@@ -2,25 +2,20 @@ import mongoose from "mongoose";
 import Roles from "../enum/roles";
 export const ScriptSchema = new mongoose.Schema({
   nameScript: { type: String, required: true, unique: true },
+  shortDescription: { type: String, required: true },
   description: { type: String, required: true },
-  trade:{
-    permanently: {
-      status: { type: Boolean, required: true, default: false },
-      price: { type: Number, required: true , default: 0},
-    },
-    rent: {
-      status: { type: Boolean, required: true, default: false },
-      Unitprice: { type: Number, required: true, default: 0}
-    },
+  plan:{
+    day: { type: Number, default: null },
+    monthly: { type: Number, default: null },
+    permanently:{ type:Number,require:true , default: null }
   },
-  promote: {
-    youTube: { type: String, required: true },
-    image: [],
-  },
+  thumbnail:{type:String,require:true},
+  video: { type: String, default: null },
+  image: [],
   Changelogs: [
     {
       version: { type: String, required: true },
-      description: { type: String, required: true },
+      logs: [],
     },
   ],
   webhook: { type: String, required: true },
@@ -31,7 +26,7 @@ export const ScriptSchema = new mongoose.Schema({
 
 export const Scripts = mongoose.model("Scripts", ScriptSchema);
 
-export const getScripts = () => Scripts.find();
+export const getScriptsByStaff = () => Scripts.find();
 export const getScriptById = (scriptId: string) =>
   Scripts.findById(scriptId).then((script) => script?.toObject()).catch(() => null);
 export const getScriptByName = (nameScript: string) => Scripts.findOne({ nameScript });
@@ -41,3 +36,7 @@ export const deleteScript = (id: string) =>
   Scripts.findByIdAndDelete(id);
   export const updateScriptById = (scriptId: string, updates: Record<string, any>) =>
     Scripts.findByIdAndUpdate(scriptId, updates, { new: true }).then((script) => script?.toObject()).catch(() => null);
+
+export const getScriptsRecommended = () => Scripts.find({ recommended: true,status:"active" });
+
+export const getScripts = () => Scripts.find({ status: "active" });

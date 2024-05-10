@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicenseByScriptId = exports.deleteLicenseByusername = exports.createLicense = exports.getLicenseById = exports.getLicenseByUsername = exports.checkLicense = exports.getLicenseByNameScriptAndUsername = exports.getLicenseByLicenseAndUsername = exports.getLicense = exports.getLicenses = exports.Licenses = void 0;
+exports.deleteManyLicenseByScriptId = exports.getLicenseByScriptId = exports.deleteLicenseByusername = exports.createLicense = exports.getLicenseById = exports.getLicenseByUsername = exports.checkLicense = exports.getLicenseByNameScriptAndUsername = exports.getLicenseByLicenseAndUsername = exports.getLicense = exports.getLicenses = exports.Licenses = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const LicenseSchema = new mongoose_1.default.Schema({
     license: { type: String, required: true, default: 'ยังไม่ได้เชื่อมต่อ License' },
@@ -44,4 +44,6 @@ const deleteLicenseByusername = (license, username) => exports.Licenses.findOneA
 exports.deleteLicenseByusername = deleteLicenseByusername;
 const getLicenseByScriptId = (scriptId) => exports.Licenses.find({ scriptId });
 exports.getLicenseByScriptId = getLicenseByScriptId;
+const deleteManyLicenseByScriptId = (scriptId) => exports.Licenses.deleteMany({ scriptId });
+exports.deleteManyLicenseByScriptId = deleteManyLicenseByScriptId;
 //# sourceMappingURL=licenses.js.map

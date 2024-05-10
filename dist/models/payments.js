@@ -11,18 +11,13 @@ const PaymentsSchema = new mongoose_1.default.Schema({
         {
             scriptId: { type: String, required: true },
             nameScript: { type: String, required: true },
-            Plan: {
-                permanently: {
-                    status: { type: Boolean, required: true, default: false },
-                    price: { type: Number, required: true, default: 0 },
-                },
-                rent: {
-                    status: { type: Boolean, required: true, default: false },
-                    Unitprice: { type: Number, required: true, default: 0 },
-                    day: { type: Number, required: true, default: 0 },
-                    price: { type: Number, required: true, default: 0 },
-                },
-            },
+            plan: {
+                permanently: { type: Number, default: null },
+                monthly: { type: Number, default: null },
+                day: { type: Number, default: null },
+                UnitPrice: { type: Number, default: null },
+                unit: { type: Number, default: null },
+            }
         },
     ],
     total: { type: Number, required: true },

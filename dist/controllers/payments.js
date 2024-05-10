@@ -53,17 +53,17 @@ const buyScript = async (req, res) => {
         }
         if (process.env.TimeZoneTH == "true") {
             await data.forEach(async (license) => {
-                const { nameScript, scriptId, Plan } = license;
-                if (!nameScript || !scriptId || !Plan || !username) {
+                const { nameScript, scriptId, plan } = license;
+                if (!nameScript || !scriptId || !plan || !username) {
                     return res.sendStatus(400);
                 }
                 await (0, licenses_1.createLicense)({
                     nameScript: nameScript,
                     scriptId: scriptId,
                     rent: {
-                        status: (Plan.rent.status) ? true : false,
-                        startDate: (Plan.rent.status) ? Date.now() + (7 * 60 * 60 * 1000) : 0,
-                        endDate: (Plan.rent.status) ? Date.now() + (Plan.rent.day * 24 * 60 * 60 * 1000 + 7 * 60 * 60 * 1000) : 0
+                        status: (plan.monthly || plan.day) ? true : false,
+                        startDate: (plan.monthly || plan.day) ? Date.now() + (7 * 60 * 60 * 1000) : 0,
+                        endDate: (plan.monthly) ? Date.now() + (31 * 24 * 60 * 60 * 1000 + 7 * 60 * 60 * 1000) : (plan.day) ? Date.now() + (plan.day * 24 * 60 * 60 * 1000 + 7 * 60 * 60 * 1000) : 0
                     },
                     owner: username
                 });
@@ -71,17 +71,17 @@ const buyScript = async (req, res) => {
         }
         else {
             await data.forEach(async (license) => {
-                const { nameScript, scriptId, Plan } = license;
-                if (!nameScript || !scriptId || !Plan || !username) {
+                const { nameScript, scriptId, plan } = license;
+                if (!nameScript || !scriptId || !plan || !username) {
                     return res.sendStatus(400);
                 }
                 await (0, licenses_1.createLicense)({
                     nameScript: nameScript,
                     scriptId: scriptId,
                     rent: {
-                        status: (Plan.rent.status) ? true : false,
-                        startDate: (Plan.rent.status) ? Date.now() : 0,
-                        endDate: (Plan.rent.status) ? Date.now() + (Plan.rent.day * 24 * 60 * 60 * 1000) : 0
+                        status: (plan.monthly || plan.day) ? true : false,
+                        startDate: (plan.monthly || plan.day) ? Date.now() : 0,
+                        endDate: (plan.monthly) ? Date.now() + (31 * 24 * 60 * 60 * 1000) : (plan.day) ? Date.now() + (plan.day * 24 * 60 * 60 * 1000) : 0
                     },
                     owner: username
                 });
