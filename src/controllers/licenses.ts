@@ -241,68 +241,69 @@ export const Checklicense = async (
   try {
     const { license, ipaddress } = req.body;
     console.log(license, ipaddress);
-    if (!license || !ipaddress) {
-      return res.sendStatus(400);
-    }
-    const License = await checkLicense(license, ipaddress);
-    if (!License) {
-      return res.status(404).send("License inactive").end();
-    }
+    res.sendStatus(200)
+    // if (!license || !ipaddress) {
+    //   return res.sendStatus(400);
+    // }
+    // const License = await checkLicense(license, ipaddress);
+    // if (!License) {
+    //   return res.status(404).send("License inactive").end();
+    // }
 
-    if (License.status === "inactive") {
-      return res.send("License is inactive").status(200).end();
-    }
+    // if (License.status === "inactive") {
+    //   return res.send("License is inactive").status(200).end();
+    // }
 
-    const Script = await getScriptById(License.scriptId);
-    if (!Script) {
-      return res.sendStatus(404);
-    }
+    // const Script = await getScriptById(License.scriptId);
+    // if (!Script) {
+    //   return res.sendStatus(404);
+    // }
 
-    if (Script.status === "inactive") {
-      return res.send("Script is inactive").status(200).end();
-    }
+    // if (Script.status === "inactive") {
+    //   return res.send("Script is inactive").status(200).end();
+    // }
 
-    const getDate = (NextTime: number) => {
-      let today = new Date(NextTime);
-      let date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      let time = today.getHours() + ":" + today.getMinutes();
-      return date + " " + time;
-    };
+    // const getDate = (NextTime: number) => {
+    //   let today = new Date(NextTime);
+    //   let date =
+    //     today.getFullYear() +
+    //     "-" +
+    //     (today.getMonth() + 1) +
+    //     "-" +
+    //     today.getDate();
+    //   let time = today.getHours() + ":" + today.getMinutes();
+    //   return date + " " + time;
+    // };
 
-    if (License.rent.status) {
-      const startDate = License.rent.startDate;
-      const endDate = License.rent.endDate;
-      if (process.env.TimeZoneTH == "true") {
-        var now = Date.now() + 7 * 60 * 60 * 1000;
-      } else {
-        var now = Date.now();
-      }
-      console.log(getDate(now), getDate(startDate), getDate(endDate));
-      if (now < startDate || now > endDate) {
-        const rentLicense = await deleteLicenseByusername(
-          license,
-          License.owner
-        );
-        if (!rentLicense) {
-          return res.sendStatus(404);
-        } else {
-          return res.send("License is expired").status(200).end();
-        }
-      }
-    }
+    // if (License.rent.status) {
+    //   const startDate = License.rent.startDate;
+    //   const endDate = License.rent.endDate;
+    //   if (process.env.TimeZoneTH == "true") {
+    //     var now = Date.now() + 7 * 60 * 60 * 1000;
+    //   } else {
+    //     var now = Date.now();
+    //   }
+    //   console.log(getDate(now), getDate(startDate), getDate(endDate));
+    //   if (now < startDate || now > endDate) {
+    //     const rentLicense = await deleteLicenseByusername(
+    //       license,
+    //       License.owner
+    //     );
+    //     if (!rentLicense) {
+    //       return res.sendStatus(404);
+    //     } else {
+    //       return res.send("License is expired").status(200).end();
+    //     }
+    //   }
+    // }
 
-    await Discordwebhook(
-      License.nameScript,
-      ipaddress,
-      License.owner,
-      Script.webhook
-    );
-    return res.send(License.scriptId).status(200).end();
+    // await Discordwebhook(
+    //   License.nameScript,
+    //   ipaddress,
+    //   License.owner,
+    //   Script.webhook
+    // );
+    // return res.send(License.scriptId).status(200).end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
