@@ -5,6 +5,7 @@ require("dotenv").config();
 const licenses_1 = require("../models/licenses");
 const scripts_1 = require("../models/scripts");
 const helpers_1 = require("../helpers");
+const webhook_1 = require("../webhook");
 const AddLicenseByStaff = async (req, res) => {
     try {
         const { nameScript, ipaddress, owner, rent, scriptId, status } = req.body;
@@ -194,63 +195,55 @@ const Checklicense = async (req, res) => {
     try {
         const { license, ipaddress } = req.body;
         console.log(license, ipaddress);
-        res.sendStatus(200);
-        // if (!license || !ipaddress) {
-        //   return res.sendStatus(400);
-        // }
-        // const License = await checkLicense(license, ipaddress);
-        // if (!License) {
-        //   return res.status(404).send("License inactive").end();
-        // }
-        // if (License.status === "inactive") {
-        //   return res.send("License is inactive").status(200).end();
-        // }
-        // const Script = await getScriptById(License.scriptId);
-        // if (!Script) {
-        //   return res.sendStatus(404);
-        // }
-        // if (Script.status === "inactive") {
-        //   return res.send("Script is inactive").status(200).end();
-        // }
-        // const getDate = (NextTime: number) => {
-        //   let today = new Date(NextTime);
-        //   let date =
-        //     today.getFullYear() +
-        //     "-" +
-        //     (today.getMonth() + 1) +
-        //     "-" +
-        //     today.getDate();
-        //   let time = today.getHours() + ":" + today.getMinutes();
-        //   return date + " " + time;
-        // };
-        // if (License.rent.status) {
-        //   const startDate = License.rent.startDate;
-        //   const endDate = License.rent.endDate;
-        //   if (process.env.TimeZoneTH == "true") {
-        //     var now = Date.now() + 7 * 60 * 60 * 1000;
-        //   } else {
-        //     var now = Date.now();
-        //   }
-        //   console.log(getDate(now), getDate(startDate), getDate(endDate));
-        //   if (now < startDate || now > endDate) {
-        //     const rentLicense = await deleteLicenseByusername(
-        //       license,
-        //       License.owner
-        //     );
-        //     if (!rentLicense) {
-        //       return res.sendStatus(404);
-        //     } else {
-        //       return res.send("License is expired").status(200).end();
-        //     }
-        //   }
-        // }
-        // await Discordwebhook(
-        //   License.nameScript,
-        //   ipaddress,
-        //   License.owner,
-        //   Script.webhook
-        // );
-        // return res.send(License.scriptId).status(200).end();
+        if (!license || !ipaddress) {
+            return res.sendStatus(400);
+        }
+        const License = await (0, licenses_1.checkLicense)(license, ipaddress);
+        if (!License) {
+            return res.status(404).send("License inactive").end();
+        }
+        if (License.status === "inactive") {
+            return res.send("License is inactive").status(200).end();
+        }
+        const Script = await (0, scripts_1.getScriptById)(License.scriptId);
+        if (!Script) {
+            return res.sendStatus(404);
+        }
+        if (Script.status === "inactive") {
+            return res.send("Script is inactive").status(200).end();
+        }
+        const getDate = (NextTime) => {
+            let today = new Date(NextTime);
+            let date = today.getFullYear() +
+                "-" +
+                (today.getMonth() + 1) +
+                "-" +
+                today.getDate();
+            let time = today.getHours() + ":" + today.getMinutes();
+            return date + " " + time;
+        };
+        if (License.rent.status) {
+            const startDate = License.rent.startDate;
+            const endDate = License.rent.endDate;
+            if (process.env.TimeZoneTH == "true") {
+                var now = Date.now() + 7 * 60 * 60 * 1000;
+            }
+            else {
+                var now = Date.now();
+            }
+            console.log(getDate(now), getDate(startDate), getDate(endDate));
+            if (now < startDate || now > endDate) {
+                const rentLicense = await (0, licenses_1.deleteLicenseByusername)(license, License.owner);
+                if (!rentLicense) {
+                    return res.sendStatus(404);
+                }
+                else {
+                    return res.send("License is expired").status(200).end();
+                }
+            }
+        }
+        await (0, webhook_1.Discordwebhook)(License.nameScript, ipaddress, License.owner, Script.webhook);
+        return res.send(License.scriptId).status(200).end();
     }
     catch (error) {
         console.log(error);
